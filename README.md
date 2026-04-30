@@ -53,7 +53,7 @@ Las instrucciones de replicación del proyecto asumen que los datos se encuentra
 │   └── raw_data.csv                                  <- Datos en formato CSV como vienen de la fuente original
 │
 ├── pipeline_scripts                                  <- Scripts de SQL para ejecución del pipeline de datos
-│   ├── 01_raw_data_schema_creation_and_load.sql      <- Script de carga inicial (i.e., actividad B)
+│   ├── raw-nfl.sql      <- Script de carga inicial (i.e., actividad B)
 │   ├── 02_data_cleaning.sql                          <- Script de limpieza de datos (i.e., actividad C)
 │   ├── 03_data_normalization.sql                     <- Script de normalización de relaciones (i.e., actividad D)
 │   └── 04_analytical_attributes_creation.sql         <- Script de creación de atributos analíticos (i.e., actividad E)
