@@ -7,7 +7,7 @@ Regina Quevedo Lopez de Cardenas, CU: , https://github.com/
 
 Andres Isaac de la Cruz Sosa, CU: , https://github.com/AndresIsaac92
 
-Arie Goldzweig Perez, CU: , https://github.com/goldzweigarie-bit
+Arie Goldzweig Perez, CU: 221746, https://github.com/goldzweigarie-bit
 
 , CU: , https://github.com/melyDelgado
 
