@@ -1,0 +1,12 @@
+CREATE DATABASE NFL; 
+
+\c NFL; 
+
+CREATE TABLE attendance (team VARCHAR(100), team_name VARCHAR(100), year SMALLINT, total BIGINT, home INT, away INT, week INT, weekly_attendance BIGINT); 
+\copy attendance (team, team_name, year, total, home, away, week, weekly_attendance) FROM '/Users/mikel/Desktop/NFL CSV/attendance.csv' WITH (FORMAT CSV, HEADER, DELIMITER ',', NULL ‘NA’); 
+
+CREATE TABLE games (year INT, week VARCHAR(10), home_team VARCHAR(100), away_team VARCHAR(100), winner VARCHAR(100), tie VARCHAR(100), day VARCHAR(20), date VARCHAR(20), time VARCHAR(20), pts_win DECIMAL(10,2), pts_loss DECIMAL(10,2), yds_win DECIMAL(10,2), turnovers_win DECIMAL(10,2), yds_loss DECIMAL(10,2), turnovers_loss DECIMAL(10,2), home_team_name VARCHAR(100), home_team_city VARCHAR(100), away_team_name VARCHAR(100), away_team_city VARCHAR(100)); 
+\copy games (year, week, home_team, away_team, winner, tie, day, date, time, pts_win, pts_loss, yds_win, turnovers_win, yds_loss, turnovers_loss, home_team_name, home_team_city, away_team_name, away_team_city) FROM '/Users/mikel/Desktop/NFL CSV/games.csv' WITH (FORMAT CSV, HEADER, DELIMITER ',', NULL ‘NA’); 
+
+CREATE TABLE standings (team VARCHAR(100), team_name VARCHAR(100), year INT, wins DECIMAL(10,2), loss DECIMAL(10,2), points_for DECIMAL(10,2), points_against DECIMAL(10,2), points_differential DECIMAL(10,2), margin_of_victory DECIMAL(10,2), strength_of_schedule DECIMAL(10,2), simple_rating DECIMAL(10,2), offensive_ranking DECIMAL(10,2), defensive_ranking DECIMAL(10,2), playoffs VARCHAR(50), sb_winner VARCHAR(50)); 
+\copy standings (team, team_name, year, wins, loss, points_for, points_against, points_differential, margin_of_victory, strength_of_schedule, simple_rating, offensive_ranking, defensive_ranking, playoffs, sb_winner) FROM '/Users/mikel/Desktop/NFL CSV/standings.csv' WITH (FORMAT CSV, HEADER, DELIMITER ',', NULL ‘NA’); 
