@@ -1,8 +1,8 @@
 # propuesta_NFL_Stadiums:
 
-La base de datos NFL Stadium Attendance contiene información sobre la asistencia a los estadios de la NFL a lo largo de múltiples temporadas. Está compuesto por 3 tablas principales: games, attendance y standings, las cuales se pueden relacionar con los atributos team, year y week. 
+La base de datos NFL Stadium Attendance contiene información sobre la asistencia a los estadios de la NFL a lo largo de múltiples temporadas. Está compuesto por 3 tablas principales: games, attendance y standings, las cuales se pueden relacionar con los atributos team, year y week.
 
-Los datos fueron recopilados a partir de fuentes públicas de estadísticas deportivas, principalmente de plataformas como Pro Football Reference y datos abiertos disponibles en Kaggle. Se espera una actualización anual aunque la última fue hace 2 años. 
+Los datos fueron recopilados a partir de fuentes públicas de estadísticas deportivas, principalmente de plataformas como Pro-Football Reference y datos abiertos disponibles en Kaggle. Se espera una actualización anual aunque la última fue hace 2 años. 
 
 Los datos fueron subidos a Kaggle por Sunjay Kapadnis y están disponibles en https://www.kaggle.com/datasets/sujaykapadnis/nfl-stadium-attendance-dataset. No se incluyó un propósito explícito para su recolección.
 
