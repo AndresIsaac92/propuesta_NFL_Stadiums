@@ -1,11 +1,11 @@
 # Proyecto BD: NFL Stadium Attendance
 
 ## Integrantes
-Mikel Loret de Mola Yaber, CU: 218645, https://github.com/loretmikel
-Regina Quevedo Lopez de Cardenas, CU: , https://github.com/
-Andres Isaac de la Cruz Sosa, CU: , https://github.com/AndresIsaac92
-Arie Goldzweig Perez, CU: , https://github.com/goldzweigarie-bit
-, CU: , https://github.com/melyDelgado
+> Mikel Loret de Mola Yaber, CU: 218645, https://github.com/loretmikel
+> Regina Quevedo Lopez de Cardenas, CU: , https://github.com/
+> Andres Isaac de la Cruz Sosa, CU: , https://github.com/AndresIsaac92
+> Arie Goldzweig Perez, CU: , https://github.com/goldzweigarie-bit
+> , CU: , https://github.com/melyDelgado
 
 
 ## Introducción
