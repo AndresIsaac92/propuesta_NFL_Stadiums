@@ -118,7 +118,7 @@ Después de nuestra primera revisión de la base de datos, encontramos muy pocos
     -- Ver partidos donde home = away
     SELECT * FROM games WHERE home_team_name = away_team_name;
 
-Sin embargo, cuando estábamos editando la base de datos, encontramos ciertas inconsistencias. Por ejemplo, no sabíamos que ciertos equipos se cambian de ciudad, por lo que los equipos (que pensé que eran 32) resultaron ser 34. Tuvimos que considerar a los Rams y a los Chargers de las dos ciudades como equipos diferentes. Por otro lado, el ranking debía ser positivo, por lo que tuvimos que agregar una condición que permitiera esta modificación.
+Sin embargo, no encontramos ningún error. Aún así notamos ciertas cosas interesantes. Por ejemplo, no sabíamos que ciertos equipos se cambian de ciudad, por lo que los equipos (que deberían ser 32) resultaron ser 34. Por lo que consideramos a los Rams de Los Ángeles y de St. Louis y los Chargers de San Diego y de Los Ángeles como equipos diferentes. Por otro lado, el ranking debía ser positivo, por lo que tuvimos que agregar una condición que permitiera esta modificación. Más allá de esto, no encontramos ninguna otra cosa que necesitáramos limpiar.  
 
 
 ## Normalización
