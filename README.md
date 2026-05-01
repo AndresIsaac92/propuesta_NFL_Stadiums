@@ -101,22 +101,22 @@ Finalmente, para cargar los datos en bruto se debe ejecutar el siguiente comando
 
 Después de nuestra primera revisión de la base de datos, encontramos muy pocos errores de limpieza. De hecho, intentamos "romper" la base de datos de varias formas:
 
--- Ver NULLs en asistencia
-SELECT COUNT(*) FROM staging WHERE weekly_attendance IS NULL;
+    -- Ver NULLs en asistencia
+    SELECT COUNT(*) FROM staging WHERE weekly_attendance IS NULL;
 
--- Ver asistencias negativas o cero
-SELECT * FROM staging WHERE weekly_attendance <= 0;
-SELECT * FROM staging WHERE home <= 0 OR away <= 0 OR total <= 0;
+    -- Ver asistencias negativas o cero
+    SELECT * FROM staging WHERE weekly_attendance <= 0;
+    SELECT * FROM staging WHERE home <= 0 OR away <= 0 OR total <= 0;
 
--- Ver puntos negativos
-SELECT * FROM games WHERE pts_win < 0 OR pts_loss < 0;
+    -- Ver puntos negativos
+    SELECT * FROM games WHERE pts_win < 0 OR pts_loss < 0;
 
--- Ver años inválidos
-SELECT DISTINCT year FROM staging WHERE year < 1920 OR year > 2025;
-SELECT DISTINCT year FROM games WHERE year < 1920 OR year > 2025;
+    -- Ver años inválidos
+    SELECT DISTINCT year FROM staging WHERE year < 1920 OR year > 2025;
+    SELECT DISTINCT year FROM games WHERE year < 1920 OR year > 2025;
 
--- Ver partidos donde home = away
-SELECT * FROM games WHERE home_team_name = away_team_name;
+    -- Ver partidos donde home = away
+    SELECT * FROM games WHERE home_team_name = away_team_name;
 
 Sin embargo, cuando estábamos editando la base de datos, encontramos ciertas inconsistencias. Por ejemplo, no sabíamos que ciertos equipos se cambian de ciudad, por lo que los equipos (que pensé que eran 32) resultaron ser 34. Tuvimos que considerar a los Rams y a los Chargers de las dos ciudades como equipos diferentes. Por otro lado, el ranking debía ser positivo, por lo que tuvimos que agregar una condición que permitiera esta modificación.
 
