@@ -3,19 +3,16 @@
 ## Integrantes
 Mikel Loret de Mola Yaber, CU: 218645, https://github.com/loretmikel
 
-Regina Quevedo Lopez de Cardenas, CU: 220225 , https://github.com/
+Regina Quevedo Lopez de Cardenas, CU: 220225, https://github.com/
 
-Andres Isaac de la Cruz Sosa, CU: , https://github.com/AndresIsaac92
+Andres Isaac de la Cruz Sosa, CU:222998, https://github.com/AndresIsaac92
 
 Arie Goldzweig Perez, CU: 221746, https://github.com/goldzweigarie-bit
 
-Carmen Sofía Delgado, CU: 208655 , https://github.com/melyDelgado
+Carmen Sofía Delgado, CU: 208655, https://github.com/melyDelgado
 
 
 ## Introducción
-
-> Esta es una buena sección para el el inciso A:
-> Introducción al conjunto de datos y al problema a estudiar considerando aspectos éticos del conjunto de datos empleado.
 
 La base de datos NFL Stadium Attendance contiene información sobre la asistencia a los estadios de la NFL a lo largo de múltiples temporadas. 
 Está compuesto por 3 tablas principales: games, attendance y standings, que se relacionan con los atributos team, year y week.  
@@ -94,12 +91,9 @@ Finalmente, para cargar los datos en bruto se debe ejecutar el siguiente comando
 \i pipeline_scripts/nfl-raw.sql
 ```
 
-> Esta es una buena sección para documentar los hallazgos del inciso B:
-> Carga inicial y análisis preliminar.
+## Análisis preliminar
 
-## Limpieza de datos
-
-Después de nuestra primera revisión de la base de datos, encontramos muy pocos errores de limpieza. De hecho, intentamos "romper" la base de datos de varias formas:
+En nuestra primera revisión de la base de datos, encontramos muy pocos errores de limpieza. De hecho, intentamos "romper" la base de datos de varias formas:
 
     -- Ver NULLs en asistencia
     SELECT COUNT(*) FROM staging WHERE weekly_attendance IS NULL;
@@ -119,6 +113,19 @@ Después de nuestra primera revisión de la base de datos, encontramos muy pocos
     SELECT * FROM games WHERE home_team_name = away_team_name;
 
 Sin embargo, no encontramos ningún error. Aún así notamos ciertas cosas interesantes. Por ejemplo, no sabíamos que ciertos equipos se cambian de ciudad, por lo que los equipos (que deberían ser 32) resultaron ser 34. Por lo que consideramos a los Rams de Los Ángeles y de St. Louis y los Chargers de San Diego y de Los Ángeles como equipos diferentes. Por otro lado, el ranking debía ser positivo, por lo que tuvimos que agregar una condición que permitiera esta modificación. Más allá de esto, no encontramos ninguna otra cosa que necesitáramos limpiar.  
+
+## Limpieza de datos
+
+El proceso de limpieza sigue una metodología de refresh destructivo, por lo que cada vez que se corra se generará desde
+cero el esquema y las tablas correspondientes. Para ejecutar el proceso de limpieza de datos se debe ejecutar el siguiente 
+comando en `psql`:
+
+```{psql}
+\i pipeline_scripts/02_data_cleaning.sql
+```
+
+> Aquí es una buena sección para documentar las actividades realizadas
+> de acuerdo a lo mencionado en el inciso C: Limpieza de datos
 
 
 ## Normalización
