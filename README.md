@@ -169,16 +169,27 @@ Sin embargo, no encontramos ningún error. Aún así notamos ciertas cosas inter
 
 ## Limpieza de datos
 
-El proceso de limpieza sigue una metodología de refresh destructivo, por lo que cada vez que se corra se generará desde
-cero el esquema y las tablas correspondientes. Para ejecutar el proceso de limpieza de datos se debe ejecutar el siguiente 
-comando en `psql`:
+Después de nuestra primera revisión de la base de datos, encontramos muy pocos errores de limpieza. De hecho, intentamos "romper" la base de datos de varias formas:
 
-```{psql}
-\i pipeline_scripts/02_data_cleaning.sql
-```
+    -- Ver NULLs en asistencia
+    SELECT COUNT(*) FROM staging WHERE weekly_attendance IS NULL;
 
-> Aquí es una buena sección para documentar las actividades realizadas
-> de acuerdo a lo mencionado en el inciso C: Limpieza de datos
+    -- Ver asistencias negativas o cero
+    SELECT * FROM staging WHERE weekly_attendance <= 0;
+    SELECT * FROM staging WHERE home <= 0 OR away <= 0 OR total <= 0;
+
+    -- Ver puntos negativos
+    SELECT * FROM games WHERE pts_win < 0 OR pts_loss < 0;
+
+    -- Ver años inválidos
+    SELECT DISTINCT year FROM staging WHERE year < 1920 OR year > 2025;
+    SELECT DISTINCT year FROM games WHERE year < 1920 OR year > 2025;
+
+    -- Ver partidos donde home = away
+    SELECT * FROM games WHERE home_team_name = away_team_name;
+
+Sin embargo, no encontramos ningún error.Aún así notamos ciertas cosas interesantes. Por ejemplo, no sabíamos que ciertos equipos se cambian de ciudad, por lo que los equipos (que deberían ser 32) resultaron ser 34. Por lo que consideramos a los Rams de Los Ángeles y de St. Louis y los Chargers de San Diego y de Los Ángeles como equipos diferentes. Por otro lado, el ranking debía ser positivo, por lo que tuvimos que agregar una condición que permitiera esta modificación. Más allá de esto, no encontramos ninguna otra cosa que necesitáramos limpiar.
+
 
 
 ## Normalización
