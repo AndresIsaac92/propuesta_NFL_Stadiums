@@ -20,11 +20,64 @@ Está compuesto por 3 tablas principales: games, attendance y standings, que se 
 Los datos fueron recopilados a partir de fuentes públicas de estadísticas deportivas, principalmente de plataformas como Pro Football Reference y de datos abiertos disponibles en Kaggle. 
 Se espera una actualización anual, aunque la última fue hace 2 años.
 
-La entidad attendance contiene aproximadamente 10,849 tuplas y 8 atributos. El atributo 'team' es la abreviatura del equipo, 'team_name' es el nombre completo, 'year' es el año de la temporada, 'week' es el número de semana de la temporada, 'weekly_attendance' es la asistencia en esa semana, 'home' asistencia total en juegos de local, 'away' asistencia total en juegos de visitante y 'total' asistecnia total general. Los atributos numéricos: son 'year', 'week', 'weekly_attendance', 'home', 'away', 'total'. Los atributos 'team' y 'team_name' son categóricos, el atributo 'team_name' es de texto y los atributos 'year' y 'week' son temporales.  
+La entidad `attendance` contiene aproximadamente 10,849 tuplas y 8 atributos. 
+La entidad `standings` tiene aproximadamente 638 registros y 15 atributos.
+La entidad `games` tiene aproximadamente 7,800 tuplas y 19 atributos.
 
-La entidad games tiene aproximadamente 7,800 tuplas y 19 atributos. El atributo 'year' es el año de la temporada, 'week' es el número de semana de la temporada, 'home_team' es el nombre completo del equipo que juega de local, 'away_team' es el nombre completo del equipo que visita, 'winner' es el ganador, 'tie' si hubo un empate, 'day' en que día de la semana jugaron, 'date' es la fecha del partido, 'time' es la hora del partido, 'pts_win' los puntos ganados, 'pts_loss' los puntos perdidos, 'yds_win' las yardas ganadas, 'turnovers_win' cuantas veces recuperaron el balón sin que haya sido por patada, 'yds_loss' yardas perdidas, 'turnovers_loss' cuantas veces perdieorn el balón sin que haya sifo por patada, 'home_team_name'nombre del equipo local, 'home_team_city' nombre de la ciudad del equipo local, 'away_team_name' el nombre del equipo que no es local y 'away_team_city' el nombre de la ciudad del equipo no local. Los atributos numéricos son: 'week', 'pts_win', 'pts_loss', 'yds_win', 'turnovers_win', 'yds_loss' y 'turnovers_loss'. Los atributos categóricos son: 'home_team', 'away_team', 'winner', 'tie', 'home_team_name', 'home_team_city', 'away_team_name' y 'away_team_city'. Los atributos de tipo texto son: 'home_team', 'away_team', 'winner', 'home_team_name', 'home_team_city', 'day', 'away_team_name' y 'away_team_city'. Los atributos temporales son: 'year' 'date' y 'time'. 
+La entidad `attendance` contiene los siguientes atributos, con los tipos de datos originales:
+| **Atributo**        | **Descripción**                    | **Tipo** |
+|---------------------|------------------------------------|----------|
+| `team`              | Ciudad en la que se basa el equipo | texto    |
+| `team_name`         | Nombre del equipo                  | texto    |
+| `year`              | Temporada                          | numérico |
+| `total`             | Asistencia total de las 17 semanas | numérico |
+| `home`              | Asistencia como equipo local       | numérico |
+| `away`              | Asistencia como equipo visitante   | numérico |
+| `week`              | Número de semana                   | texto    |
+| `weekly_attendance` | Asistencia en la respectiva semana | numérico |  
 
-La entidad standings tiene aproximadamaente 638 registros y 15 atributos. El atirbuto 'team' es el nombre de la ciudad del equipo, 'team_name' el nombre del equipo, 'year' el año de la temporada, 'wins' cuántos partidos ganaron, 'loss' cuántos partidos perdieron, 'points_for' cuántos puntos anotaron en toda la temporada, 'points_against' cuántos puntos le anotaron en contra, 'points_differential' la resta de puntos anotados y puntos anotados en contra, 'margin_of_victory' e margen de las victorias, 'strenght_of_schedule' mide la complejidad de los equipos a los que se enfrentará, 'simple rating' mide la calidad del equipo, 'offensive ranking' rankea a la ofensiva, 'defensive_ranking' rankea a la defensiva, 'playoffs' te dice si el equipo califico a playoffs, 'sb_winner' te dice si pasaron al superbowl. Los atirubutos numéricos son: 'wins', 'loss', 'points_for', 'points_differential', 'margin_of_victory', 'strenght_of_schedule', 'simple rating', 'offensive ranking' y 'defensive_ranking'. Los atirbutos categóricos son: 'team', 'team_name', 'playoffs', y 'sb_winner'. El único atributo temporal es 'year'. Los atributos de tipo texto son: 'team' y 'team_name'.  
+La entidad `standings` contiene los siguientes atributos, con los tipos de datos originales:
+| **Atributo**           | **Descripción**                                                                  | **Tipo** |
+|------------------------|----------------------------------------------------------------------------------|----------|
+| `team`                 | Ciudad en la que se basa el equipo                                               | texto    |
+| `team_name`            | Nombre del equipo                                                                | texto    |
+| `year`                 | Temporada                                                                        | numérico |
+| `wins`                 | Número de victorias en la temporada regular                                      | numérico |
+| `loss`                 | Número de derrotas en la temporada regular                                       | numérico |
+| `points_for`           | Total de puntos a favor                                                          | numérico |
+| `points_against`       | Total de puntos en contra                                                        | numérico |
+| `points_differential`  | Diferencia de puntos (`points_for` - `points_against`)                           | numérico |
+| `margin_of_victory`    | Margen de victoria (`points_differential` / número de juegos)                    | numérico |
+| `strength_of_schedule` | Calidad promedio del oponente, medida con el SRS (Simple Rating System)          | numérico |
+| `simple_rating`        | Calidad del equipo relativa al promedio (0.0), medida con el SRS                 | numérico |
+| `offensive_ranking`    | Calidad de la ofensiva del equipo relativa al promedio (0.0), medida con el SRS  | numérico |
+| `defensive_ranking`    | Calidad de la defensiva del equipo relativa al promedio (0.0), medida con el SRS | numérico |
+| `playoffs`             | El equipo avanzó a los playoffs, o no                                            | texto    |
+| `sb_winner`            | El equipo ganó el Super Bowl                                                     | texto    |
+
+La entidad `games` contiene los siguientes atributos, con los tipos de datos originales:
+| **Atributo**     | **Descripción**                           | **Tipo** |
+|------------------|-------------------------------------------|----------|
+| `year`           | Temporada                                 | numérico |
+| `week`           | Número de semana (1-17, más los playoffs) | texto    |
+| `home_team`      | Equipo local                              | texto    |
+| `away_team`      | Equipo visitante                          | texto    |
+| `winner`         | Equipo ganador                            | texto    |
+| `tie`            | Si hay un empate, el equipo "perdedor"    | texto    |
+| `day`            | Día de la semana                          | texto    |
+| `date`           | Fecha, sin el año                         | texto    |
+| `time`           | Hora a la que empezó el juego             | texto    |
+| `pts_win`        | Puntos anotados por el equipo ganador     | numérico |
+| `pts_loss`       | Puntos anotados por el equipo perdedor    | numérico |
+| `yds_win`        | Yardas del equipo ganador                 | numérico |
+| `turnovers_win`  | Pérdidas del balón del equipo ganador     | numérico |
+| `yds_loss`       | Yardas del equipo perdedor                | numérico |
+| `turnovers_loss` | Pérdidas del balón del equipo perdedor    | numérico |
+| `home_team_name` | Nombre del equipo local                   | texto    |
+| `home_team_city` | Ciudad del equipo local                   | texto    |
+| `away_team_name` | Nombre del equipo visitante               | texto    |
+| `away_team_city` | Ciudad del equipo visitante               | texto    |
+
 
 El objetivo de estos datos es realizar un análisis de cómo la asistencia al estadio y el rendimiento se afectan. ¿Una buena asistencia causa un buen rendimiento, o el buen rendimiento de un equipo produce mejor asistencia? ¿Cuáles son los equipos que más llenan su estadio? Este análisis puede ser aplicado en predicciones deportivas y análisis de datos interno de los equipos. 
 
