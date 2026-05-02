@@ -3,9 +3,9 @@
 ## Integrantes
 Mikel Loret de Mola Yaber, CU: 218645, https://github.com/loretmikel
 
-Regina Quevedo Lopez de Cardenas, CU: 220225, https://github.com/
+Regina Quevedo López de Cárdenas, CU: 220225, https://github.com/
 
-Andres Isaac de la Cruz Sosa, CU:222998, https://github.com/AndresIsaac92
+Andrés Isaac de la Cruz Sosa, CU:222998, https://github.com/AndresIsaac92
 
 Arie Goldzweig Perez, CU: 221746, https://github.com/goldzweigarie-bit
 
@@ -120,13 +120,13 @@ Las instrucciones de replicación del proyecto asumen que los datos se encuentra
 2. Contar con `postgres 16` o superior instalado en la computadora o servidor donde se replicará el proyecto.
 3. Contar con una base de datos exclusiva para este proyecto. Todas las instrucciones del proyecto asumen que la sesión está conectada a la misma base de datos.
 4. ...
-5. El resto de las intrucciones asumen que el directorio de trabajo para `psql` es la raíz de este proyecto.
+5. El resto de las instrucciones asumen que el directorio de trabajo para `psql` es la raíz de este proyecto.
 
 
 ## Carga inicial
 
-En primer lugar se deberá crear una base de datos exclusiva para este proyecto. Para ello se puede ejecutar el siguiente 
-comando en `psql`:
+En primer lugar, se deberá crear una base de datos exclusiva para este proyecto. Para ello se puede ejecutar el siguiente 
+Comando en `psql`:
 
 ```{psql}
 CREATE DATABASE nfl;
@@ -194,8 +194,13 @@ Sin embargo, no encontramos ningún error.Aún así notamos ciertas cosas intere
 
 ## Normalización
 
-La normalización se realiza también mediante la estrategia de refresh destructivo. Para ejecutar el proceso de
-normalización se puede emplear el siguiente comando en `psql`:
+La base de datos original constaba de tres tablas principales: staging (asistencia), games (partidos) y standings (clasificaciones). Debido a que los datos estaban muy limpios, sustituimos la parte del proyecto de limpieza por normalización hasta Cuarta Forma Normal. La base de datos original presentaba redundancias y dependencias funcionales y multivaluadas que podían causar anomalías en las operaciones de inserción, actualización y eliminación. 
+	Las tablas originales ya cumplían con 1FN, ya que no había grupos repetitivos ni listas dentro de las celdas. Por ejemplo, cada asistencia semanal estaba en una fila separada, y cada partido tenía sus propias estadísticas en una fila individual.
+	Dentro de la tabla staging encontramos dependencias funcionales que no dependían únicamente de la clave completa, lo que hacía que se repitieran en cada fila de la misma temporada, generando mucha redundancia. Para pasar a 2FN, separamos estos atributos en una nueva tabla llamada SeasonalAttendance, cuyas llaves son (team_id, season_id). 
+	También detectamos dependencias transitivas. Por ejemplo, en la tabla staging original, team_name dependía de team, que a su vez era parte de la clave. También en games, atributos como home_team_name y home_team_city dependían transitivamente de home_team. Por lo que creamos una tabla independiente Team que contiene id, full_name y city. De esta forma, los nombres y ciudades de los equipos se almacenan una sola vez, eliminando la redundancia y las dependencias transitivas. Hicimos lo mismo para una tabla Season con id y year, para evitar la redundancia: el año se repetiría en todas las tablas relacionadas; season_id es una única referencia.
+	Para la BCNF, verificamos que todo determinante fuera una clave candidata. En nuestras tablas, las dependencias funcionales restantes cumplían esta condición, por lo que ya estábamos en BCNF.
+Para llegar a la 4FN, identificamos dependencias multivaluadas (DMV) en la tabla staging. Observamos que para un par (team, year), existía un conjunto independiente de valores para week y weekly_attendance. Por lo que creamos weekly_attendance y seasonal_attendance. Al separarlas, cada tabla contiene una sola "faceta" de la información. No quedan dependencias multivaluadas cruzadas entre ambas tablas, ya que representan conceptos independientes. La tabla games presentaba redundancias similares. Separamos esta en game y en gamestats para evitar repetir las estadísticas si hubiera sido necesario duplicar información del partido. Por último, notamos que en la standings se encontraba sb_winner que en la mayoría de las tuplas era “No Superbowl”, lo cual era redundante, por lo que creamos una última tabla con solo los ganadores de cada año. 
+
 
 ```{psql}
 \i pipeline_scripts/03_data_normalization.sql
