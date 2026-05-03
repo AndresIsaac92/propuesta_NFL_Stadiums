@@ -185,8 +185,7 @@ SELECT
 FROM raw.attendance a
 INNER JOIN Team t ON t.full_name = a.team_name
 INNER JOIN Season s ON s.year = a.year
-WHERE a.weekly_attendance IS NOT NULL
-  AND a.week IS NOT NULL;
+WHERE a.week IS NOT NULL;
 
 -- Poblar SeasonalAttendance
 INSERT INTO SeasonalAttendance (team_id, season_id, home_attendance_total, away_attendance_total, total_attendance)
