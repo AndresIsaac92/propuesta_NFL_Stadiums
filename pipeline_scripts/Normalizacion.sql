@@ -158,13 +158,13 @@ INSERT INTO Team (full_name, city)
 SELECT DISTINCT 
     TRIM(home_team_name) AS full_name,
     TRIM(home_team_city) AS city
-FROM games
+FROM raw.games
 WHERE home_team_name IS NOT NULL;
 
 -- Poblar Season
 INSERT INTO Season (year)
 SELECT DISTINCT year
-FROM attendance
+FROM raw.attendance
 WHERE year IS NOT NULL
 ORDER BY year;
 
@@ -175,7 +175,7 @@ SELECT
     s.id AS season_id,
     a.week,
     a.weekly_attendance
-FROM attendance a
+FROM raw.attendance a
 INNER JOIN Team t ON t.full_name = a.team_name
 INNER JOIN Season s ON s.year = a.year
 WHERE a.weekly_attendance IS NOT NULL
@@ -189,7 +189,7 @@ SELECT
     MAX(a.home) AS home_total,
     MAX(a.away) AS away_total,
     MAX(a.total) AS total
-FROM attendance a
+FROM raw.attendance a
 INNER JOIN Team t ON t.full_name = a.team_name
 INNER JOIN Season s ON s.year = a.year
 WHERE a.home IS NOT NULL OR a.away IS NOT NULL OR a.total IS NOT NULL
@@ -210,7 +210,7 @@ SELECT
     away_team.id AS away_team_id,
     TRIM(g.winner) AS winner_name,
     FALSE AS is_tie
-FROM games g
+FROM raw.games g
 INNER JOIN Season s ON s.year = g.year
 INNER JOIN Team home_team ON TRIM(LOWER(home_team.full_name)) = TRIM(LOWER(g.home_team_name))
 INNER JOIN Team away_team ON TRIM(LOWER(away_team.full_name)) = TRIM(LOWER(g.away_team_name))
@@ -232,7 +232,7 @@ SELECT
     g.yds_loss,
     g.turnovers_win,
     g.turnovers_loss
-FROM games g
+FROM raw.games g
 INNER JOIN Season s ON s.year = g.year
 INNER JOIN Team home_team ON home_team.full_name = TRIM(g.home_team_name)
 INNER JOIN Team away_team ON away_team.full_name = TRIM(g.away_team_name)
@@ -266,7 +266,7 @@ SELECT
         WHEN a.playoffs = 'Yes' OR a.playoffs = 'TRUE' OR a.playoffs = '1' THEN TRUE 
         ELSE FALSE 
     END AS made_playoffs
-FROM attendance a
+FROM raw.attendance a
 INNER JOIN Team t ON t.full_name = a.team_name
 INNER JOIN Season s ON s.year = a.year
 WHERE a.team_name IS NOT NULL AND a.year IS NOT NULL;
@@ -277,27 +277,27 @@ SELECT
     s.id AS season_id,
     t.id AS winning_team_id,
     t.full_name AS winning_team_name
-FROM attendance a
+FROM raw.attendance a
 INNER JOIN Season s ON s.year = a.year
 INNER JOIN Team t ON t.full_name = a.team_name
 WHERE a.sb_winner = 'Won Superbowl';
 
 --CREAR RESPALDOS
 -- Renombrar (como backup)
-ALTER TABLE attendance RENAME TO attendance_backup;
-ALTER TABLE games RENAME TO games_backup;
-ALTER TABLE standings RENAME TO standings_backup;
+ALTER TABLE raw.attendance RENAME TO attendance_backup;
+ALTER TABLE raw.games RENAME TO games_backup;
+ALTER TABLE raw.standings RENAME TO standings_backup;
 
 --Limpieza
 -- Ver NULLs en asistencia
-SELECT COUNT(*) FROM attendance_backup WHERE weekly_attendance IS NULL;
+SELECT COUNT(*) FROM raw.attendance_backup WHERE weekly_attendance IS NULL;
 -- Ver asistencias negativas o cero
-SELECT * FROM attendance_backup WHERE weekly_attendance <= 0;
-SELECT * FROM attendance_backup WHERE home <= 0 OR away <= 0 OR total <= 0;
+SELECT * FROM raw.attendance_backup WHERE weekly_attendance <= 0;
+SELECT * FROM raw.attendance_backup WHERE home <= 0 OR away <= 0 OR total <= 0;
 -- Ver puntos negativos
-SELECT * FROM games_backup WHERE pts_win < 0 OR pts_loss < 0;
+SELECT * FROM raw.games_backup WHERE pts_win < 0 OR pts_loss < 0;
 -- Ver años inválidos
-SELECT DISTINCT year FROM attendance_backup WHERE year < 1920 OR year > 2025;
-SELECT DISTINCT year FROM games_backup WHERE year < 1920 OR year > 2025;
+SELECT DISTINCT year FROM raw.attendance_backup WHERE year < 1920 OR year > 2025;
+SELECT DISTINCT year FROM raw.games_backup WHERE year < 1920 OR year > 2025;
 -- Ver partidos donde home = away
-SELECT * FROM games_backup WHERE home_team_name = away_team_name;
+SELECT * FROM raw.games_backup WHERE home_team_name = away_team_name;
