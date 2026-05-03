@@ -164,7 +164,7 @@ WHERE home_team_name IS NOT NULL;
 -- Poblar Season
 INSERT INTO Season (year)
 SELECT DISTINCT year
-FROM staging
+FROM attendance
 WHERE year IS NOT NULL
 ORDER BY year;
 
@@ -173,26 +173,26 @@ INSERT INTO WeeklyAttendance (team_id, season_id, week, weekly_attendance)
 SELECT 
     t.id AS team_id,
     s.id AS season_id,
-    st.week,
-    st.weekly_attendance
-FROM staging st
-INNER JOIN Team t ON t.full_name = st.team_name
-INNER JOIN Season s ON s.year = st.year
-WHERE st.weekly_attendance IS NOT NULL
-  AND st.week IS NOT NULL;
+    a.week,
+    a.weekly_attendance
+FROM attendance a
+INNER JOIN Team t ON t.full_name = a.team_name
+INNER JOIN Season s ON s.year = a.year
+WHERE a.weekly_attendance IS NOT NULL
+  AND a.week IS NOT NULL;
 
 -- Poblar SeasonalAttendance
 INSERT INTO SeasonalAttendance (team_id, season_id, home_attendance_total, away_attendance_total, total_attendance)
 SELECT 
     t.id AS team_id,
     s.id AS season_id,
-    MAX(st.home) AS home_total,
-    MAX(st.away) AS away_total,
-    MAX(st.total) AS total
-FROM staging st
-INNER JOIN Team t ON t.full_name = st.team_name
-INNER JOIN Season s ON s.year = st.year
-WHERE st.home IS NOT NULL OR st.away IS NOT NULL OR st.total IS NOT NULL
+    MAX(a.home) AS home_total,
+    MAX(a.away) AS away_total,
+    MAX(a.total) AS total
+FROM attendance a
+INNER JOIN Team t ON t.full_name = a.team_name
+INNER JOIN Season s ON s.year = a.year
+WHERE a.home IS NOT NULL OR a.away IS NOT NULL OR a.total IS NOT NULL
 GROUP BY t.id, s.id;
 
 -- Poblar Game
@@ -252,24 +252,24 @@ INSERT INTO Standing (
 SELECT 
     t.id AS team_id,
     s.id AS season_id,
-    st.wins,
-    st.loss,
-    st.points_for,
-    st.points_against,
-    st.points_differential,
-    st.margin_of_victory,
-    st.strength_of_schedule,
-    st.simple_rating,
-    st.offensive_ranking,
-    st.defensive_ranking,
+    a.wins,
+    a.loss,
+    a.points_for,
+    a.points_against,
+    a.points_differential,
+    a.margin_of_victory,
+    a.strength_of_schedule,
+    a.simple_rating,
+    a.offensive_ranking,
+    a.defensive_ranking,
     CASE 
-        WHEN st.playoffs = 'Yes' OR st.playoffs = 'TRUE' OR st.playoffs = '1' THEN TRUE 
+        WHEN a.playoffs = 'Yes' OR a.playoffs = 'TRUE' OR a.playoffs = '1' THEN TRUE 
         ELSE FALSE 
     END AS made_playoffs
-FROM standings st
-INNER JOIN Team t ON t.full_name = st.team_name
-INNER JOIN Season s ON s.year = st.year
-WHERE st.team_name IS NOT NULL AND st.year IS NOT NULL;
+FROM attendance a
+INNER JOIN Team t ON t.full_name = a.team_name
+INNER JOIN Season s ON s.year = a.year
+WHERE a.team_name IS NOT NULL AND a.year IS NOT NULL;
 
 -- Poblar SuperBowl
 INSERT INTO SuperBowl (season_id, winning_team_id, winning_team_name)
@@ -277,27 +277,27 @@ SELECT
     s.id AS season_id,
     t.id AS winning_team_id,
     t.full_name AS winning_team_name
-FROM standings st
-INNER JOIN Season s ON s.year = st.year
-INNER JOIN Team t ON t.full_name = st.team_name
-WHERE st.sb_winner = 'Won Superbowl';
+FROM attendance a
+INNER JOIN Season s ON s.year = a.year
+INNER JOIN Team t ON t.full_name = a.team_name
+WHERE a.sb_winner = 'Won Superbowl';
 
 --CREAR RESPALDOS
 -- Renombrar (como backup)
-ALTER TABLE staging RENAME TO staging_backup;
+ALTER TABLE attendance RENAME TO attendance_backup;
 ALTER TABLE games RENAME TO games_backup;
 ALTER TABLE standings RENAME TO standings_backup;
 
 --Limpieza
 -- Ver NULLs en asistencia
-SELECT COUNT(*) FROM staging_backup WHERE weekly_attendance IS NULL;
+SELECT COUNT(*) FROM attendance_backup WHERE weekly_attendance IS NULL;
 -- Ver asistencias negativas o cero
-SELECT * FROM staging_backup WHERE weekly_attendance <= 0;
-SELECT * FROM staging_backup WHERE home <= 0 OR away <= 0 OR total <= 0;
+SELECT * FROM attendance_backup WHERE weekly_attendance <= 0;
+SELECT * FROM attendance_backup WHERE home <= 0 OR away <= 0 OR total <= 0;
 -- Ver puntos negativos
 SELECT * FROM games_backup WHERE pts_win < 0 OR pts_loss < 0;
 -- Ver años inválidos
-SELECT DISTINCT year FROM staging_backup WHERE year < 1920 OR year > 2025;
+SELECT DISTINCT year FROM attendance_backup WHERE year < 1920 OR year > 2025;
 SELECT DISTINCT year FROM games_backup WHERE year < 1920 OR year > 2025;
 -- Ver partidos donde home = away
 SELECT * FROM games_backup WHERE home_team_name = away_team_name;
