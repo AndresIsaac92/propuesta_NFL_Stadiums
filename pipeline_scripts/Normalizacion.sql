@@ -1,3 +1,10 @@
+--LIMPIEZA
+--Quitar NAs en weekly_assistance
+DELETE FROM assistance
+    WHERE weekly_assistance = "NA";
+--Cambiar el tipo de dato
+ALTER TABLE assistance ALTER COLUMN weekly_assistance TYPE BIGINT;
+
 --CREAR NUEVAS TABLAS
 
 --Tabla Team
