@@ -1,9 +1,9 @@
 --LIMPIEZA
 --Quitar NAs en weekly_attendance
-DELETE FROM attendance
+DELETE FROM raw.attendance
     WHERE weekly_attendance = "NA";
 --Cambiar el tipo de dato
-ALTER TABLE attendance ALTER COLUMN weekly_attendance TYPE BIGINT;
+ALTER TABLE raw.attendance ALTER COLUMN weekly_attendance TYPE INT;
 
 --CREAR NUEVAS TABLAS
 
@@ -283,10 +283,10 @@ SELECT
     s.id AS season_id,
     t.id AS winning_team_id,
     t.full_name AS winning_team_name
-FROM raw.attendance a
+FROM raw.standings
 INNER JOIN Season s ON s.year = a.year
 INNER JOIN Team t ON t.full_name = a.team_name
-WHERE a.sb_winner = 'Won Superbowl';
+WHERE standings.sb_winner = 'Won Superbowl';
 
 --CREAR RESPALDOS
 -- Renombrar (como backup)
