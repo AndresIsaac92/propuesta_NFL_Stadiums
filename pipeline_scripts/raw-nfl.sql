@@ -20,7 +20,7 @@ CREATE TABLE raw.attendance (
     home int4,
     away int4,
     week int4,
-    weekly_attendance int8
+    weekly_attendance varchar(12)
 );
 
 DROP TABLE IF EXISTS raw.games;
