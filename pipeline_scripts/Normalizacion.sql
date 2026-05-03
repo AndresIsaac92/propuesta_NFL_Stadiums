@@ -1,9 +1,9 @@
 --LIMPIEZA
---Quitar NAs en weekly_assistance
-DELETE FROM assistance
-    WHERE weekly_assistance = "NA";
+--Quitar NAs en weekly_attendance
+DELETE FROM attendance
+    WHERE weekly_attendance = "NA";
 --Cambiar el tipo de dato
-ALTER TABLE assistance ALTER COLUMN weekly_assistance TYPE BIGINT;
+ALTER TABLE attendance ALTER COLUMN weekly_attendance TYPE BIGINT;
 
 --CREAR NUEVAS TABLAS
 
