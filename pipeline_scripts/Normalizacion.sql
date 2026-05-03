@@ -258,24 +258,24 @@ INSERT INTO Standing (
 SELECT 
     t.id AS team_id,
     s.id AS season_id,
-    a.wins,
-    a.loss,
-    a.points_for,
-    a.points_against,
-    a.points_differential,
-    a.margin_of_victory,
-    a.strength_of_schedule,
-    a.simple_rating,
-    a.offensive_ranking,
-    a.defensive_ranking,
+    st.wins,
+    st.loss,
+    st.points_for,
+    st.points_against,
+    st.points_differential,
+    st.margin_of_victory,
+    st.strength_of_schedule,
+    st.simple_rating,
+    st.offensive_ranking,
+    st.defensive_ranking,
     CASE 
-        WHEN a.playoffs = 'Yes' OR a.playoffs = 'TRUE' OR a.playoffs = '1' THEN TRUE 
+        WHEN st.playoffs = 'Yes' OR st.playoffs = 'TRUE' OR st.playoffs = '1' THEN TRUE 
         ELSE FALSE 
     END AS made_playoffs
-FROM raw.attendance a
-INNER JOIN Team t ON t.full_name = a.team_name
-INNER JOIN Season s ON s.year = a.year
-WHERE a.team_name IS NOT NULL AND a.year IS NOT NULL;
+FROM raw.standings st
+INNER JOIN Team t ON t.full_name = st.team_name
+INNER JOIN Season s ON s.year = st.year
+WHERE st.team_name IS NOT NULL AND st.year IS NOT NULL;
 
 -- Poblar SuperBowl
 INSERT INTO SuperBowl (season_id, winning_team_id, winning_team_name)
