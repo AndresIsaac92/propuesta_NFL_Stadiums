@@ -240,5 +240,100 @@ Para llegar a la 4FN, identificamos dependencias multivaluadas (DMV) en la tabla
 \i pipeline_scripts/03_data_normalization.sql
 ```
 
->  Aquí es una buena sección para documentar la descomposición intuitiva de las tablas.
+La entidad `team` contiene los siguientes atributos, con los tipos de datos originales:
+| **Atributo**        | **Descripción**                    | **Tipo** |
+|---------------------|------------------------------------|----------|
+| `id`              | Identificador único del equipo | numérico    |
+| `full_name`         | Nombre completo del equipo                  | texto    |
+| `city`              | Ciudades del equipo                          | texto |
+
+
+La entidad `season` contiene los siguientes atributos, con los tipos de datos originales:
+| **Atributo**        | **Descripción**                    | **Tipo** |
+|---------------------|------------------------------------|----------|
+| `id`              | Identificador único de la temporada       | numérico    |
+| `year`         | Año de la temporada                  | numérico    |
+| `start_date`              | Fecha de inicio de la temporada                          | fecha |
+| `end_date`              | Fecha de fin de la temporada                          | fecha |
+
+
+La entidad `weeklyAttendance` contiene los siguientes atributos, con los tipos de datos originales:
+
+| **Atributo**        | **Descripción**                    | **Tipo** |
+|---------------------|------------------------------------|----------|
+| `id`              | Identificador único del registro de asistencia | numérico    |
+| `team_id`              | Identificador del equipo (referencia a Team) | numérico    |
+| `season_id`              | Identificador de la temporada (referencia a Season) | numérico    |
+| `week`         | Número de semana (1-18, más playoffs)                  | numérico    |
+| `weekly_attendance`              | Asistencia en la respectiva semana          | numérico |
+
+
+La entidad `seasonalAttendance` contiene los siguientes atributos, con los tipos de datos originales:
+| **Atributo**        | **Descripción**                    | **Tipo** |
+|---------------------|------------------------------------|----------|
+| `id`              | Identificador único del registro de asistencia total       | numérico    |
+| `team_id `         | Identificador del equipo (referencia a Team)           | numérico    |
+| `season_id `              | Identificador de la temporada (referencia a Season)  | numérico |
+| `home_attendance_total`        | Asistencia total como equipo local en la temporada              | numérico |
+| `away_attendance_total`     | Asistencia total como equipo visitante en la temporada    | numérico |
+| `total_attendance`        | Asistencia total de la temporada                   | numérico |
+
+
+La entidad `game` contiene los siguientes atributos, con los tipos de datos originales:
+| **Atributo**        | **Descripción**                    | **Tipo** |
+|---------------------|------------------------------------|----------|
+| `id`                | Identificador único del partido    | numérico |
+| `season_id `        | Identificador de la temporada (referencia a Season)  | numérico  |
+| `week `              | Semana del partido     | texto |
+| `game_date `              | Fecha del partido | texto    |
+| `game_time `         | Hora de inicio del partido        | texto    |
+| `day_of_week `              | Día de la semana en que se jugó  | texto |
+| `home_team_id `              | Identificador del equipo local (referencia a Team) | numérico    |
+| `away_team_id `         | Identificador del equipo visitante (referencia a Team)  | numérico    |
+| `winner_name `              | Nombre del equipo ganador                          | texto |
+| `is_tie `              | Indica si el partido terminó en empate | booleano    |
+
+
+La entidad `gameStats` contiene los siguientes atributos, con los tipos de datos originales:
+| **Atributo**        | **Descripción**                    | **Tipo** |
+|---------------------|------------------------------------|----------|
+| `id`              | Identificador único de las estadísticas del partido       | numérico    |
+| `game_id`         | Identificador del partido (referencia a Game) | numérico    |
+| `pts_win`              | Puntos anotados por el equipo ganador  | numérico |
+| `pts_loss`              | Puntos anotados por el equipo perdedor | numérico |
+| `yds_win`              | Yardas totales del equipo ganador  | numérico    |
+| `yds_loss`         | Yardas totales del equipo perdedor | numérico    |
+| `turnover_win`              | Pérdidas de balón del equipo ganador   | numérico |
+| `turnover_loss`              | Pérdidas de balón del equipo perdedor  | numérico |
+
+La entidad `standing` contiene los siguientes atributos, con los tipos de datos originales:
+
+| **Atributo**        | **Descripción**                    | **Tipo** |
+|---------------------|------------------------------------|----------|
+| `id`              | Identificador único del registro de clasificación | numérico    |
+| `team_id`              | Identificador del equipo (referencia a Team) | numérico    |
+| `season_id`              | Identificador de la temporada (referencia a Season) | numérico    |
+| `wins`         | Número de victorias en la temporada regular  | numérico    |
+| `losses`              | Número de derrotas en la temporada regular  | numérico |
+| `points_for`              | Total de puntos anotados a favor | numérico    |
+| `points_against`              | Total de puntos recibidos en contra | numérico    |
+| `points_differential`         | Diferencia de puntos (points_for - points_against)  | numérico    |
+| `margin_of_victory`              | Margen de victoria promedio  | numérico |
+| `strength_of_schedule`              | Calidad promedio del oponente (SRS)     | numérico |
+| `simple_rating`              | Calidad del equipo relativa al promedio (SRS)   | numérico |
+| `offensive_ranking`              | Ranking ofensivo del equipo   | numérico |
+| `defensive_ranking`              | Ranking defensivo del equipo  | numérico |
+| `made_playoffs`              | Indica si el equipo avanzó a los playoffs  | booleano |
+
+
+La entidad `superBowl` contiene los siguientes atributos, con los tipos de datos originales:
+| **Atributo**        | **Descripción**                    | **Tipo** |
+|---------------------|------------------------------------|----------|
+| `id`              | Identificador único del registro del Super Bowl  | numérico    |
+| `season_id `         | Identificador de la temporada (referencia a Season)       | numérico    |
+| `winning_team_id `              | Identificador del equipo campeón (referencia a Team) | numérico |
+| `winning_team_name`        | Nombre del equipo campeón   | texto |
+
+
+
 > También un ERD del diseño final debe ser incluido.
