@@ -284,8 +284,8 @@ SELECT
     t.id AS winning_team_id,
     t.full_name AS winning_team_name
 FROM raw.standings
-INNER JOIN Season s ON s.year = a.year
-INNER JOIN Team t ON t.full_name = a.team_name
+INNER JOIN Season s ON s.year = raw.attendance.year
+INNER JOIN Team t ON t.full_name = raw.attendance.team_name
 WHERE standings.sb_winner = 'Won Superbowl';
 
 --CREAR RESPALDOS
