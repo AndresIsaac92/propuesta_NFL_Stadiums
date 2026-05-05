@@ -1,9 +1,9 @@
 --LIMPIEZA
 --Quitar NAs en weekly_attendance
 DELETE FROM raw.attendance
-    WHERE weekly_attendance = "NA";
+    WHERE weekly_attendance LIKE 'NA';
 --Cambiar el tipo de dato
-ALTER TABLE raw.attendance ALTER COLUMN weekly_attendance TYPE INT;
+ALTER TABLE raw.attendance ALTER COLUMN weekly_attendance TYPE BIGINT;
 
 --CREAR NUEVAS TABLAS
 
