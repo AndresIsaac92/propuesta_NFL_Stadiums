@@ -3,7 +3,7 @@
 ## Integrantes
 Mikel Loret de Mola Yaber, CU: 218645, https://github.com/loretmikel
 
-Regina Quevedo López de Cárdenas, CU: 220225, https://github.com/
+Regina Quevedo López de Cárdenas, CU: 220225, https://github.com/reginaquevedo
 
 Andrés Isaac de la Cruz Sosa, CU:222998, https://github.com/AndresIsaac92
 
