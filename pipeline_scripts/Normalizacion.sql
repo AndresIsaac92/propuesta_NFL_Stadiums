@@ -2,8 +2,13 @@
 --Quitar NAs en weekly_attendance
 DELETE FROM raw.attendance
     WHERE weekly_attendance LIKE 'NA';
---Cambiar el tipo de dato
-ALTER TABLE raw.attendance ALTER COLUMN weekly_attendance TYPE BIGINT;
+--Crear columna con el tipo de dato correcto, poblarla, borrar la anterior y renombrar la nueva
+ALTER TABLE raw.attendance ADD COLUMN weekly_att_temp BIGINT;
+UPDATE raw.attendance SET weekly_att_temp = (
+    SELECT weekly_attendance
+    FROM raw.attendance
+);
+ALTER TABLE raw.attendance DROP COLUMN weekly_attendance;
 
 --CREAR NUEVAS TABLAS
 
