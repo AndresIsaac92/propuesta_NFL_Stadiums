@@ -235,9 +235,10 @@ Para la BCNF, verificamos que todo determinante fuera una clave candidata. En nu
 	
 Para llegar a la 4FN, identificamos dependencias multivaluadas (DMV) en la tabla staging. Observamos que para un par (team, year), existía un conjunto independiente de valores para week y weekly_attendance. Por lo que creamos weekly_attendance y seasonal_attendance. Al separarlas, cada tabla contiene una sola "faceta" de la información. No quedan dependencias multivaluadas cruzadas entre ambas tablas, ya que representan conceptos independientes. La tabla games presentaba redundancias similares. Separamos esta en game y en gamestats para evitar repetir las estadísticas si hubiera sido necesario duplicar información del partido. Por último, notamos que en la standings se encontraba sb_winner que en la mayoría de las tuplas era "No Superbowl", lo cual era redundante, por lo que creamos una última tabla con solo los ganadores de cada año. 
 
+El archivo sql se puede encontrar en la carpeta pipeline_scripts:
 
 ```{psql}
-\i pipeline_scripts/03_data_normalization.sql
+\i pipeline_scripts/Normalizacion.sql
 ```
 
 La entidad `team` contiene los siguientes atributos, con los tipos de datos originales:
