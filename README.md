@@ -3,7 +3,7 @@
 ## Integrantes
 Mikel Loret de Mola Yaber, CU: 218645, https://github.com/loretmikel
 
-Regina Quevedo López de Cárdenas, CU: 220225, https://github.com/reginaquevedo
+Regina Quevedo López de Cárdenas, CU: 220225, https://github.com/
 
 Andrés Isaac de la Cruz Sosa, CU:222998, https://github.com/AndresIsaac92
 
@@ -141,7 +141,7 @@ Posteriormente, debemos conectarnos a dicha base de datos:
 Finalmente, para cargar los datos en bruto se debe ejecutar el siguiente comando en una sesión de línea de comandos `psql`:
 
 ```{psql}
-\i pipeline_scripts/raw-nfl.sql
+\i pipeline_scripts/nfl-raw.sql
 ```
 
 ## Análisis preliminar
@@ -235,118 +235,10 @@ Para la BCNF, verificamos que todo determinante fuera una clave candidata. En nu
 	
 Para llegar a la 4FN, identificamos dependencias multivaluadas (DMV) en la tabla staging. Observamos que para un par (team, year), existía un conjunto independiente de valores para week y weekly_attendance. Por lo que creamos weekly_attendance y seasonal_attendance. Al separarlas, cada tabla contiene una sola "faceta" de la información. No quedan dependencias multivaluadas cruzadas entre ambas tablas, ya que representan conceptos independientes. La tabla games presentaba redundancias similares. Separamos esta en game y en gamestats para evitar repetir las estadísticas si hubiera sido necesario duplicar información del partido. Por último, notamos que en la standings se encontraba sb_winner que en la mayoría de las tuplas era "No Superbowl", lo cual era redundante, por lo que creamos una última tabla con solo los ganadores de cada año. 
 
-El archivo sql se puede encontrar en la carpeta pipeline_scripts:
 
 ```{psql}
-\i pipeline_scripts/Normalizacion.sql
+\i pipeline_scripts/03_data_normalization.sql
 ```
 
-La entidad `team` contiene los siguientes atributos, con los tipos de datos originales:
-| **Atributo**        | **Descripción**                    | **Tipo** |
-|---------------------|------------------------------------|----------|
-| `id`              | Identificador único del equipo | numérico    |
-| `full_name`         | Nombre completo del equipo                  | texto    |
-| `city`              | Ciudades del equipo                          | texto |
-
-
-La entidad `season` contiene los siguientes atributos, con los tipos de datos originales:
-| **Atributo**        | **Descripción**                    | **Tipo** |
-|---------------------|------------------------------------|----------|
-| `id`              | Identificador único de la temporada       | numérico    |
-| `year`         | Año de la temporada                  | numérico    |
-| `start_date`              | Fecha de inicio de la temporada                          | fecha |
-| `end_date`              | Fecha de fin de la temporada                          | fecha |
-
-
-La entidad `weeklyAttendance` contiene los siguientes atributos, con los tipos de datos originales:
-
-| **Atributo**        | **Descripción**                    | **Tipo** |
-|---------------------|------------------------------------|----------|
-| `id`              | Identificador único del registro de asistencia | numérico    |
-| `team_id`              | Identificador del equipo (referencia a Team) | numérico    |
-| `season_id`              | Identificador de la temporada (referencia a Season) | numérico    |
-| `week`         | Número de semana (1-18, más playoffs)                  | numérico    |
-| `weekly_attendance`              | Asistencia en la respectiva semana          | numérico |
-
-
-La entidad `seasonalAttendance` contiene los siguientes atributos, con los tipos de datos originales:
-| **Atributo**        | **Descripción**                    | **Tipo** |
-|---------------------|------------------------------------|----------|
-| `id`              | Identificador único del registro de asistencia total       | numérico    |
-| `team_id `         | Identificador del equipo (referencia a Team)           | numérico    |
-| `season_id `              | Identificador de la temporada (referencia a Season)  | numérico |
-| `home_attendance_total`        | Asistencia total como equipo local en la temporada              | numérico |
-| `away_attendance_total`     | Asistencia total como equipo visitante en la temporada    | numérico |
-| `total_attendance`        | Asistencia total de la temporada                   | numérico |
-
-
-La entidad `game` contiene los siguientes atributos, con los tipos de datos originales:
-| **Atributo**        | **Descripción**                    | **Tipo** |
-|---------------------|------------------------------------|----------|
-| `id`                | Identificador único del partido    | numérico |
-| `season_id `        | Identificador de la temporada (referencia a Season)  | numérico  |
-| `week `              | Semana del partido     | texto |
-| `game_date `              | Fecha del partido | texto    |
-| `game_time `         | Hora de inicio del partido        | texto    |
-| `day_of_week `              | Día de la semana en que se jugó  | texto |
-| `home_team_id `              | Identificador del equipo local (referencia a Team) | numérico    |
-| `away_team_id `         | Identificador del equipo visitante (referencia a Team)  | numérico    |
-| `winner_name `              | Nombre del equipo ganador                          | texto |
-| `is_tie `              | Indica si el partido terminó en empate | booleano    |
-
-
-La entidad `gameStats` contiene los siguientes atributos, con los tipos de datos originales:
-| **Atributo**        | **Descripción**                    | **Tipo** |
-|---------------------|------------------------------------|----------|
-| `id`              | Identificador único de las estadísticas del partido       | numérico    |
-| `game_id`         | Identificador del partido (referencia a Game) | numérico    |
-| `pts_win`              | Puntos anotados por el equipo ganador  | numérico |
-| `pts_loss`              | Puntos anotados por el equipo perdedor | numérico |
-| `yds_win`              | Yardas totales del equipo ganador  | numérico    |
-| `yds_loss`         | Yardas totales del equipo perdedor | numérico    |
-| `turnover_win`              | Pérdidas de balón del equipo ganador   | numérico |
-| `turnover_loss`              | Pérdidas de balón del equipo perdedor  | numérico |
-
-La entidad `standing` contiene los siguientes atributos, con los tipos de datos originales:
-
-| **Atributo**        | **Descripción**                    | **Tipo** |
-|---------------------|------------------------------------|----------|
-| `id`              | Identificador único del registro de clasificación | numérico    |
-| `team_id`              | Identificador del equipo (referencia a Team) | numérico    |
-| `season_id`              | Identificador de la temporada (referencia a Season) | numérico    |
-| `wins`         | Número de victorias en la temporada regular  | numérico    |
-| `losses`              | Número de derrotas en la temporada regular  | numérico |
-| `points_for`              | Total de puntos anotados a favor | numérico    |
-| `points_against`              | Total de puntos recibidos en contra | numérico    |
-| `points_differential`         | Diferencia de puntos (points_for - points_against)  | numérico    |
-| `margin_of_victory`              | Margen de victoria promedio  | numérico |
-| `strength_of_schedule`              | Calidad promedio del oponente (SRS)     | numérico |
-| `simple_rating`              | Calidad del equipo relativa al promedio (SRS)   | numérico |
-| `offensive_ranking`              | Ranking ofensivo del equipo   | numérico |
-| `defensive_ranking`              | Ranking defensivo del equipo  | numérico |
-| `made_playoffs`              | Indica si el equipo avanzó a los playoffs  | booleano |
-
-
-La entidad `superBowl` contiene los siguientes atributos, con los tipos de datos originales:
-| **Atributo**        | **Descripción**                    | **Tipo** |
-|---------------------|------------------------------------|----------|
-| `id`              | Identificador único del registro del Super Bowl  | numérico    |
-| `season_id `         | Identificador de la temporada (referencia a Season)       | numérico    |
-| `winning_team_id `              | Identificador del equipo campeón (referencia a Team) | numérico |
-| `winning_team_name`        | Nombre del equipo campeón   | texto |
-
-
-
+>  Aquí es una buena sección para documentar la descomposición intuitiva de las tablas.
 > También un ERD del diseño final debe ser incluido.
-
-
-## Análisis
- Para ver cómo quedaron las tablas normalizadas, consulta el apéndice: 
- 
- Para ver el análisis causal sobre la relación entre asistencia y rendimiento, consulta el apéndice:
- 
- Para ver la predicción de asistencia futura, consulta el apéndice: 
- 
- Para ver el análisis estacional de calendario, consulta el apéndice: 
- 
- 
