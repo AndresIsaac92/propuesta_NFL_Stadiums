@@ -338,3 +338,12 @@ La entidad `superBowl` contiene los siguientes atributos, con los tipos de datos
 
 
 > También un ERD del diseño final debe ser incluido.
+
+
+## Análisis
+ Para ver cómo quedaron las tablas normalizadas, consulta el apéndice: 
+ Para ver el análisis causal sobre la relación entre asistencia y rendimiento, consulta el apéndice: 
+ Para ver la predicción de asistencia futura, consulta el apéndice: 
+ Para ver el análisis estacional de calendario, consulta el apéndice: 
+ 
+ 
