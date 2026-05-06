@@ -9,6 +9,7 @@ UPDATE raw.attendance SET weekly_att_temp = (
     FROM raw.attendance
 );
 ALTER TABLE raw.attendance DROP COLUMN weekly_attendance;
+ALTER TABLE raw.attendance RENAME weekly_att_temp TO weekly_attendance;
 
 --CREAR NUEVAS TABLAS
 
