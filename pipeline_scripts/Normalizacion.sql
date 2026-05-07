@@ -273,7 +273,7 @@ SELECT
     st.offensive_ranking,
     st.defensive_ranking,
     CASE 
-        WHEN st.playoffs = 'Yes' OR st.playoffs = 'TRUE' OR st.playoffs = '1' THEN TRUE 
+        WHEN st.playoffs = 'Playoffs' THEN TRUE 
         ELSE FALSE 
     END AS made_playoffs
 FROM raw.standings st
