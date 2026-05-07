@@ -141,7 +141,7 @@ Posteriormente, debemos conectarnos a dicha base de datos:
 Finalmente, para cargar los datos en bruto se debe ejecutar el siguiente comando en una sesión de línea de comandos `psql`:
 
 ```{psql}
-\i pipeline_scripts/nfl-raw.sql
+\i pipeline_scripts/raw-nfl.sql
 ```
 
 ## Análisis preliminar
