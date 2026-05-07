@@ -292,14 +292,6 @@ INNER JOIN Season s ON s.year = raw.standings.year
 INNER JOIN Team t ON t.full_name = raw.standings.team_name
 WHERE standings.sb_winner = 'Won Superbowl';
 
---Añadir winner_id a la tabla game
-ALTER TABLE Game ADD COLUMN winner_id BIGINT;
-
-INSERT INTO Game (winner_id)
-    SELECT t.id AS winner_id
-    FROM Team t
-    INNER JOIN Game g ON g.winner_name = t.city || ' ' || t.full_name;
-
 
 --CREAR RESPALDOS
 -- Renombrar (como backup)
