@@ -4,10 +4,8 @@ DELETE FROM raw.attendance
     WHERE weekly_attendance LIKE 'NA';
 --Crear columna con el tipo de dato correcto, poblarla, borrar la anterior y renombrar la nueva
 ALTER TABLE raw.attendance ADD COLUMN weekly_att_temp BIGINT;
-UPDATE raw.attendance SET weekly_att_temp = (
-    SELECT weekly_attendance
-    FROM raw.attendance
-);
+UPDATE raw.attendance SET temp_price = CAST(weekly_attendance AS BIGINT);
+
 ALTER TABLE raw.attendance DROP COLUMN weekly_attendance;
 ALTER TABLE raw.attendance RENAME weekly_att_temp TO weekly_attendance;
 
