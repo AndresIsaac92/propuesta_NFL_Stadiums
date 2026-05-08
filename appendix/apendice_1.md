@@ -11,7 +11,8 @@ Es decir, deben de estar guardados en la misma carpeta que los archivos del repo
 
 Esta carpeta con los archivos del repositorio y los datos guardados se debería de ver algo así:
 
-<img width="789" height="122" alt="Captura de pantalla 2026-05-07 183644" src="https://github.com/user-attachments/assets/de563821-d94a-45bc-a31e-5ab3cc87e136" />
+<img width="794" height="158" alt="Captura de pantalla 2026-05-07 234057" src="https://github.com/user-attachments/assets/d24fe9b5-eabb-484e-90bd-8514f98f3878" />
+
 
 ## Paso 3: Preparación en `psql` antes de ejecutar los scripts de SQL
 Abrimos la aplicación `psql` y tras ingresar, primero revisaremos si ya hay alguna base de datos llamada `nfl` con:
@@ -39,7 +40,7 @@ Ahora, nos aseguramos de que el directorio de trabajo para `psql` sea la raíz d
 ```
 \cd <path>
 ```
-Aquí, <path> es la ruta de acceso de la carpeta con los archivos y los datos.
+Aquí, <path> es la ruta de acceso de la carpeta con los archivos y los datos. Si esta ruta contiene símbolos backslash '\', se les debe cambiar por slash '/'.
 
 ## Paso 4: Ejecutar los scripts
 Ahora sí, ejecutamos el script de carga con:
