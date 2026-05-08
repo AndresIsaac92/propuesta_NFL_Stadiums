@@ -40,7 +40,7 @@ Ahora, nos aseguramos de que el directorio de trabajo para `psql` sea la raíz d
 ```
 \cd <path>
 ```
-Aquí, <path> es la ruta de acceso de la carpeta con los archivos y los datos. Si esta ruta contiene símbolos backslash '\', se les debe cambiar por slash '/'.
+Aquí, `<path>` es la ruta de acceso de la carpeta con los archivos y los datos. Si esta ruta contiene símbolos backslash `\`, se les debe cambiar por slash `/`.
 
 ## Paso 4: Ejecutar los scripts
 Ahora sí, ejecutamos el script de carga con:
@@ -55,4 +55,4 @@ Y el script de normalización con:
 
 ## Paso 5 (opcional): Visualización con una herramienta con mejor UI como TablePlus
 Ahora, podemos abrir TablePlus (o alguna otra herramienta) y crear una nueva conexión con el mismo usuario y contraseña que en `psql`, y la base de datos `nfl`.
-Ahora finalmente los datos cargados y listos para ser visualizados o realizar consultas con ellos.
+Ahora tenemos, finalmente, los datos cargados y listos para ser visualizados o realizar consultas con ellos.
