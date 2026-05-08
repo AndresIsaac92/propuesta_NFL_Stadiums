@@ -122,6 +122,7 @@ Las instrucciones de replicación del proyecto asumen que los datos se encuentra
 4. ...
 5. El resto de las instrucciones asumen que el directorio de trabajo para `psql` es la raíz de este proyecto.
 
+#### Para ver instrucciones paso a paso de la replicación, ver el [Apéndice 1: Instrucciones de replicación](appendix/apendice_1.md).
 
 ## Carga inicial
 
