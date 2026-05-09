@@ -226,8 +226,8 @@ SELECT
     CASE WHEN g.tie = 'NA' THEN FALSE ELSE TRUE END AS is_tie
 FROM raw.games g
 INNER JOIN Season s ON s.year = g.year
-INNER JOIN Team home_team ON TRIM(LOWER(home_team.name)) = TRIM(LOWER(g.home_team_name))
-INNER JOIN Team away_team ON TRIM(LOWER(away_team.name)) = TRIM(LOWER(g.away_team_name))
+INNER JOIN Team home_team ON TRIM(LOWER(home_team.full_name)) = TRIM(LOWER(g.home_team))
+INNER JOIN Team away_team ON TRIM(LOWER(away_team.full_name)) = TRIM(LOWER(g.away_team))
 LEFT JOIN Team winner_team ON TRIM(LOWER(winner_team.full_name)) = TRIM(LOWER(g.winner))
 WHERE g.year IS NOT NULL 
   AND g.week IS NOT NULL
