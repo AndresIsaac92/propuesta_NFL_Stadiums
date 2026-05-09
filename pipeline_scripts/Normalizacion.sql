@@ -221,7 +221,7 @@ SELECT
     home_team.id AS home_team_id,
     away_team.id AS away_team_id,
     CASE WHEN g.winner = 'NA' THEN NULL ELSE winner_team.id END AS winner_id,
-    CASE WHEN g.winner = 'NA' THEN TRUE ELSE FALSE END AS is_tie
+    CASE WHEN g.tie = 'NA' THEN FALSE ELSE TRUE END AS is_tie
 FROM raw.games g
 INNER JOIN Season s ON s.year = g.year
 INNER JOIN Team home_team ON TRIM(LOWER(home_team.full_name)) = TRIM(LOWER(g.home_team_name))
