@@ -14,8 +14,9 @@ ALTER TABLE raw.attendance RENAME weekly_att_temp TO weekly_attendance;
 --Tabla Team
 CREATE TABLE Team (
     id BIGSERIAL PRIMARY KEY,
-    full_name VARCHAR(100) NOT NULL,
-    city VARCHAR(100)
+    name VARCHAR(100) NOT NULL,
+    city VARCHAR(100),
+    full_name VARCHAR(100)
 );
 
 -- Tabla Season
@@ -167,10 +168,11 @@ CREATE TABLE SuperBowl (
 
 -- Poblar Team (Aquí un error fue que dos equipos se cambiaron de ciudad, por lo que consideramos a los Rams de Los Angeles y de St. Louis y a los Chargers de San Diego y de Los Angeles)
 
-INSERT INTO Team (full_name, city)
+INSERT INTO Team (name, city, full_name)
 SELECT DISTINCT 
-    TRIM(home_team_name) AS full_name,
-    TRIM(home_team_city) AS city
+    TRIM(home_team_name) AS name,
+    TRIM(home_team_city) AS city,
+    TRIM(home_team_city) || ' ' || TRIM(home_team_name) AS full_name
 FROM raw.games
 WHERE home_team_name IS NOT NULL;
 
@@ -189,7 +191,7 @@ SELECT
     a.week,
     a.weekly_attendance
 FROM raw.attendance a
-INNER JOIN Team t ON t.full_name = a.team_name
+INNER JOIN Team t ON t.name = a.team_name
 INNER JOIN Season s ON s.year = a.year
 WHERE a.week IS NOT NULL;
 
@@ -202,7 +204,7 @@ SELECT
     MAX(a.away) AS away_total,
     MAX(a.total) AS total
 FROM raw.attendance a
-INNER JOIN Team t ON t.full_name = a.team_name
+INNER JOIN Team t ON t.name = a.team_name
 INNER JOIN Season s ON s.year = a.year
 WHERE a.home IS NOT NULL OR a.away IS NOT NULL OR a.total IS NOT NULL
 GROUP BY t.id, s.id;
@@ -224,8 +226,8 @@ SELECT
     CASE WHEN g.tie = 'NA' THEN FALSE ELSE TRUE END AS is_tie
 FROM raw.games g
 INNER JOIN Season s ON s.year = g.year
-INNER JOIN Team home_team ON TRIM(LOWER(home_team.full_name)) = TRIM(LOWER(g.home_team_name))
-INNER JOIN Team away_team ON TRIM(LOWER(away_team.full_name)) = TRIM(LOWER(g.away_team_name))
+INNER JOIN Team home_team ON TRIM(LOWER(home_team.name)) = TRIM(LOWER(g.home_team_name))
+INNER JOIN Team away_team ON TRIM(LOWER(away_team.name)) = TRIM(LOWER(g.away_team_name))
 LEFT JOIN Team winner_team ON TRIM(LOWER(winner_team.full_name)) = TRIM(LOWER(g.winner))
 WHERE g.year IS NOT NULL 
   AND g.week IS NOT NULL
@@ -246,8 +248,8 @@ SELECT
     g.turnovers_loss
 FROM raw.games g
 INNER JOIN Season s ON s.year = g.year
-INNER JOIN Team home_team ON home_team.full_name = TRIM(g.home_team_name)
-INNER JOIN Team away_team ON away_team.full_name = TRIM(g.away_team_name)
+INNER JOIN Team home_team ON home_team.name = TRIM(g.home_team_name)
+INNER JOIN Team away_team ON away_team.name = TRIM(g.away_team_name)
 INNER JOIN Game gm ON gm.season_id = s.id 
     AND gm.week = g.week
     AND gm.home_team_id = home_team.id
@@ -279,7 +281,7 @@ SELECT
         ELSE FALSE 
     END AS made_playoffs
 FROM raw.standings st
-INNER JOIN Team t ON t.full_name = st.team_name
+INNER JOIN Team t ON t.name = st.team_name
 INNER JOIN Season s ON s.year = st.year
 WHERE st.team_name IS NOT NULL AND st.year IS NOT NULL;
 
@@ -288,10 +290,10 @@ INSERT INTO SuperBowl (season_id, winning_team_id, winning_team_name)
 SELECT 
     s.id AS season_id,
     t.id AS winning_team_id,
-    t.full_name AS winning_team_name
+    t.name AS winning_team_name
 FROM raw.standings
 INNER JOIN Season s ON s.year = raw.standings.year
-INNER JOIN Team t ON t.full_name = raw.standings.team_name
+INNER JOIN Team t ON t.name = raw.standings.team_name
 WHERE standings.sb_winner = 'Won Superbowl';
 
 
