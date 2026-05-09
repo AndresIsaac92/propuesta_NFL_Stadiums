@@ -243,3 +243,16 @@ Para llegar a la 4FN, identificamos dependencias multivaluadas (DMV) en la tabla
 
 >  Aquí es una buena sección para documentar la descomposición intuitiva de las tablas.
 > También un ERD del diseño final debe ser incluido.
+
+
+
+## Análisis
+ Para ver cómo quedaron las tablas normalizadas, consulta el apéndice: 
+ 
+ Para ver el análisis causal sobre la relación entre asistencia y rendimiento, consulta el apéndice:
+ 
+ Para ver la predicción de asistencia futura, consulta el apéndice: 
+ 
+ Para ver el análisis estacional de calendario, consulta el apéndice: 
+ 
+ 
