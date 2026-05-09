@@ -79,7 +79,9 @@ CREATE TABLE Game (
     day_of_week VARCHAR(10),
     home_team_id BIGINT NOT NULL,
     away_team_id BIGINT NOT NULL,
-    winner_name VARCHAR(100),  -- Nombre del equipo ganador (texto)
+     winner_id BIGINT,          -- FK al equipo ganador (NULL si es empate)
+    FOREIGN KEY (winner_id) REFERENCES Team (id)
+        ON UPDATE CASCADE ON DELETE RESTRICT, 
     is_tie BOOLEAN DEFAULT FALSE,
     
     FOREIGN KEY (season_id) REFERENCES Season (id)
@@ -208,7 +210,7 @@ GROUP BY t.id, s.id;
 -- Poblar Game
 INSERT INTO Game (
     season_id, week, game_date, game_time, day_of_week,
-    home_team_id, away_team_id, winner_name, is_tie
+    home_team_id, away_team_id, winner_id, is_tie
 )
 SELECT 
     s.id AS season_id,
@@ -218,16 +220,16 @@ SELECT
     g.day AS day_of_week,
     home_team.id AS home_team_id,
     away_team.id AS away_team_id,
-    TRIM(g.winner) AS winner_name,
-    FALSE AS is_tie
+    CASE WHEN g.winner = 'NA' THEN NULL ELSE winner_team.id END AS winner_id,
+    CASE WHEN g.winner = 'NA' THEN TRUE ELSE FALSE END AS is_tie
 FROM raw.games g
 INNER JOIN Season s ON s.year = g.year
 INNER JOIN Team home_team ON TRIM(LOWER(home_team.full_name)) = TRIM(LOWER(g.home_team_name))
 INNER JOIN Team away_team ON TRIM(LOWER(away_team.full_name)) = TRIM(LOWER(g.away_team_name))
+LEFT JOIN Team winner_team ON TRIM(LOWER(winner_team.full_name)) = TRIM(LOWER(g.winner))
 WHERE g.year IS NOT NULL 
   AND g.week IS NOT NULL
-  AND g.winner IS NOT NULL
-  AND g.winner != 'NA';
+  AND g.winner IS NOT NULL;
 
 -- Poblar GameStats
 INSERT INTO GameStats (
