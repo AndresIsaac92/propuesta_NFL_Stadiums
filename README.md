@@ -249,7 +249,7 @@ Para llegar a la 4FN, identificamos dependencias multivaluadas (DMV) en la tabla
 ## Análisis
  Para ver cómo quedaron las tablas normalizadas, consulta el apéndice: 
  
- Para ver el análisis causal sobre la relación entre asistencia y rendimiento, consulta el apéndice:
+ Para ver el análisis de correlación sobre la relación entre asistencia y rendimiento, consulta el apéndice:
  
  Para ver la predicción de asistencia futura, consulta el apéndice: 
  
