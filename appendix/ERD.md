@@ -9,7 +9,9 @@ Cambiamos la tabla games principalmente por las dependencias funcionales parcial
 ## Tabla Standings
 La tabla de standings tenía una dependencia transitiva. El ganador del Super Bowl dependía únicmanete del año {year} → {sb_winner}, por lo cual, separamos estos datos en otra tabla, para evitar inconsistencias. Al igual que en otras tablas, el nombre y la ciudad del equipo s emovieron a otra tabla. 
 
-Tabla Team
+
+### Tabla Team
+
 | **Team**            | **Descripción**                      | **Tipo** |
 |---------------------|--------------------------------------|----------|
 | `id`                | id del equipo                        | numérico |  
@@ -18,14 +20,16 @@ Tabla Team
 | `full_name`         | Nombre completo del equipo + ciudad  | texto    |
 
 
-Tabla Season 
+### Tabla Season 
+
 | **Season**          | **Descripción**                      | **Tipo** |
 |---------------------|--------------------------------------|----------|
 | `id`                | id de la temporada                   | numérico |  
 | `year`              | El año en el que se llevo a cabo     | numérico |
 
 
-Tabla Weekly Attendance
+### Tabla Weekly Attendance
+
 | **WeeklyAttendance**   | **Descripción**                   | **Tipo** |
 |------------------------|-----------------------------------|----------|
 | `id`                   | id de la asistencia por semana    | numérico |  
@@ -35,7 +39,8 @@ Tabla Weekly Attendance
 | `weekly_attendance     | Número de asistencia por semana   | numérico |
 
 
-Tabla Seasonal Attendance
+### Tabla Seasonal Attendance
+
 | **SeasonalAttendance** | **Descripción**                   | **Tipo** |
 |------------------------|-----------------------------------|----------|
 | `id`                   | id de la asistencia por temporada | numérico |  
@@ -46,7 +51,8 @@ Tabla Seasonal Attendance
 | `total_attendance`     | Número de asistencia total        | numérico |
 
 
-Tabla Game
+### Tabla Game
+
 | **Game**               | **Descripción**                   | **Tipo** |
 |------------------------|-----------------------------------|----------|
 | `id`                   | id del partido                    | numérico |  
@@ -60,7 +66,8 @@ Tabla Game
 | `is_tie`               | Indica si el partido fue un empate| boolean  |
 
 
-Tabla GameStats
+### Tabla GameStats
+
 | **Gamestats**    | **Descripción**                         | **Tipo** |
 |------------------|-----------------------------------------|----------|
 | `id`             | id de los stats del partido             | numérico |  
@@ -72,7 +79,9 @@ Tabla GameStats
 | `turnovers_win`  | Pérdidas del balón del equipo ganador   | numérico |
 | `turnovers_loss` | Pérdidas del balón del equipo perdedor  | numérico |
 
-Tabla Standings 
+
+### Tabla Standings 
+
 | **Standings**         | **Descripción**                                                                  | **Tipo** |
 |-----------------------|----------------------------------------------------------------------------------|----------|
 | `id`                  | id de los standings                                                              | numérico |
@@ -90,7 +99,9 @@ Tabla Standings
 | `defensive_ranking`   | Calidad de la defensiva del equipo relativa al promedio (0.0), medida con el SRS | numérico |
 | `made_playoffs`       | Indica si el equipo avanzó a los playoffs                                        | boolean  |
 
-Tabla Super Bowl
+
+### Tabla Super Bowl
+
 | **SuperBowl**          | **Descripción**                   | **Tipo** |
 |------------------------|-----------------------------------|----------|
 | `id`                   | id del superbowl                  | numérico |  
