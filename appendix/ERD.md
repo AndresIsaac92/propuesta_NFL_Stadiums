@@ -1,3 +1,5 @@
+[ERD_nfl.pdf](https://github.com/user-attachments/files/27613637/ERD_nfl.pdf)
+[ERD_nfl.pdf](https://github.com/user-attachments/files/27613635/ERD_nfl.pdf)
 # Tablas normlaizadas 
 
 ## Tabla staging (attendance)
