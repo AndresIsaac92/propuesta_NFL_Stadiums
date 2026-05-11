@@ -81,7 +81,7 @@ La entidad `games` contiene los siguientes atributos, con los tipos de datos ori
 
 El objetivo de estos datos es realizar un análisis de cómo la asistencia al estadio y el rendimiento se afectan. ¿Una buena asistencia causa un buen rendimiento, o el buen rendimiento de un equipo produce mejor asistencia? ¿Cuáles son los equipos que más llenan su estadio? Este análisis puede ser aplicado en predicciones deportivas y análisis de datos interno de los equipos. 
 
-Las implicaciones éticas que conlleva este análisis incluyen pero no se limitan a su uso para hacer apuestas deportivas o los efectos que su uso en el análisis interno de los equipos puedan tener en el precio o disponibilidad de los boletos para los juegos. 
+Las implicaciones éticas que conlleva este análisis incluyen, pero no se limitan a su uso para hacer apuestas deportivas o los efectos que su uso en el análisis interno de los equipos pueda tener en el precio o disponibilidad de los boletos para los juegos. 
 
 
 ### Fuente de datos
@@ -120,7 +120,7 @@ Las instrucciones de replicación del proyecto asumen que los datos se encuentra
 2. Contar con `postgres 16` o superior instalado en la computadora o servidor donde se replicará el proyecto.
 3. Contar con una base de datos exclusiva para este proyecto. Todas las instrucciones del proyecto asumen que la sesión está conectada a la misma base de datos.
 4. ...
-5. El resto de las instrucciones asumen que el directorio de trabajo para `psql` es la raíz de este proyecto.
+5. El resto de las instrucciones asume que el directorio de trabajo para `psql` es la raíz de este proyecto.
 
 #### Para ver instrucciones paso a paso de la replicación, ver el [Apéndice 1: Instrucciones de replicación](appendix/apendice_1.md).
 
@@ -166,7 +166,7 @@ En nuestra primera revisión de la base de datos, encontramos muy pocos errores 
     -- Ver partidos donde home = away
     SELECT * FROM games WHERE home_team_name = away_team_name;
 
-Sin embargo, no encontramos ningún error. Aún así notamos ciertas cosas interesantes. Por ejemplo, no sabíamos que ciertos equipos se cambian de ciudad, por lo que los equipos (que deberían ser 32) resultaron ser 34. Por lo que consideramos a los Rams de Los Ángeles y de St. Louis y los Chargers de San Diego y de Los Ángeles como equipos diferentes. Por otro lado, el ranking debía ser positivo, por lo que tuvimos que agregar una condición que permitiera esta modificación. Más allá de esto, no encontramos ninguna otra cosa que necesitáramos limpiar.  
+Sin embargo, no encontramos ningún error. Aun así, notamos ciertas cosas interesantes. Por ejemplo, no sabíamos que ciertos equipos se cambiaban de ciudad, por lo que los equipos (que deberían ser 32) resultaron ser 34. Por lo que consideramos a los Rams de Los Ángeles y de St. Louis y los Chargers de San Diego y de Los Ángeles como equipos diferentes. Por otro lado, el ranking debía ser positivo, por lo que tuvimos que agregar una condición que permitiera esta modificación. Más allá de esto, no encontramos ninguna otra cosa que necesitáramos limpiar.  
 
 ## Limpieza de datos
 
@@ -211,7 +211,7 @@ Al relacionar los datos de partidos con la tabla de equipos, nos dimos cuenta de
 INNER JOIN Team home_team ON TRIM(LOWER(home_team.full_name)) = TRIM(LOWER(g.home_team_name))
 ```
 
-Sin esto, partidos con nombres como `"New England Patriots "` (con espacio al final) no hubieran encontrado su equipo correspondiente y se habrían perdido.
+Sin esto, partidos con nombres como "New England Patriots " (con espacio al final) no se habrían encontrado con su equipo correspondiente y se habrían perdido.
 
 ### Los partidos con ganador `'NA'` se excluyeron
 
@@ -224,24 +224,24 @@ Al cargar los equipos nos dimos cuenta de que había 34 equipos en lugar de 32. 
 
 ## Normalización
 
-La base de datos original constaba de tres tablas principales: staging (asistencia), games (partidos) y standings (clasificaciones). Debido a que los datos estaban muy limpios, sustituimos la parte del proyecto de limpieza por normalización hasta Cuarta Forma Normal. La base de datos original presentaba redundancias y dependencias funcionales y multivaluadas que podían causar anomalías en las operaciones de inserción, actualización y eliminación. 
+La base de datos original constaba de tres tablas principales: staging (asistencia), games (partidos) y standings (clasificaciones). Debido a que los datos estaban muy limpios, sustituimos la parte del proyecto de limpieza por normalización hasta la Cuarta Forma Normal. La base de datos original presentaba redundancias y dependencias funcionales y multivaluadas que podían causar anomalías en las operaciones de inserción, actualización y eliminación. 
 
 Las tablas originales ya cumplían con 1FN, ya que no había grupos repetitivos ni listas dentro de las celdas. Por ejemplo, cada asistencia semanal estaba en una fila separada, y cada partido tenía sus propias estadísticas en una fila individual.
 	
 Dentro de la tabla staging encontramos dependencias funcionales que no dependían únicamente de la clave completa, lo que hacía que se repitieran en cada fila de la misma temporada, generando mucha redundancia. Para pasar a 2FN, separamos estos atributos en una nueva tabla llamada SeasonalAttendance, cuyas llaves son (team_id, season_id). 
 	
-También detectamos dependencias transitivas. Por ejemplo, en la tabla staging original, team_name dependía de team, que a su vez era parte de la clave. También en games, atributos como home_team_name y home_team_city dependían transitivamente de home_team. Por lo que creamos una tabla independiente Team que contiene id, full_name y city. De esta forma, los nombres y ciudades de los equipos se almacenan una sola vez, eliminando la redundancia y las dependencias transitivas. Hicimos lo mismo para una tabla Season con id y year, para evitar la redundancia: el año se repetiría en todas las tablas relacionadas; season_id es una única referencia.
+También detectamos dependencias transitivas. Por ejemplo, en la tabla staging original, team_name dependía de team, que a su vez era parte de la clave. También en games, atributos como home_team_name y home_team_city dependían transitivamente de home_team. Por lo que creamos una tabla independiente, Team, que contiene id, full_name y city. De esta forma, los nombres y ciudades de los equipos se almacenan una sola vez, eliminando la redundancia y las dependencias transitivas. Hicimos lo mismo para una tabla Season con id y year, para evitar la redundancia: el año se repetiría en todas las tablas relacionadas; season_id es una única referencia.
 	
 Para la BCNF, verificamos que todo determinante fuera una clave candidata. En nuestras tablas, las dependencias funcionales restantes cumplían esta condición, por lo que ya estábamos en BCNF.
 	
-Para llegar a la 4FN, identificamos dependencias multivaluadas (DMV) en la tabla staging. Observamos que para un par (team, year), existía un conjunto independiente de valores para week y weekly_attendance. Por lo que creamos weekly_attendance y seasonal_attendance. Al separarlas, cada tabla contiene una sola "faceta" de la información. No quedan dependencias multivaluadas cruzadas entre ambas tablas, ya que representan conceptos independientes. La tabla games presentaba redundancias similares. Separamos esta en game y en gamestats para evitar repetir las estadísticas si hubiera sido necesario duplicar información del partido. Por último, notamos que en la standings se encontraba sb_winner que en la mayoría de las tuplas era "No Superbowl", lo cual era redundante, por lo que creamos una última tabla con solo los ganadores de cada año. 
+Para llegar a la 4FN, identificamos dependencias multivaluadas (DMV) en la tabla staging. Observamos que para un par (team, year), existía un conjunto independiente de valores para week y weekly_attendance. Por lo que creamos weekly_attendance y seasonal_attendance. Al separarlas, cada tabla contiene una sola "faceta" de la información. No quedan dependencias multivaluadas cruzadas entre ambas tablas, ya que representan conceptos independientes. La tabla games presentaba redundancias similares. Separamos esta en game y en gamestats para evitar repetir las estadísticas si hubiera sido necesario duplicar información del partido. Por último, notamos que en las standings se encontraba sb_winner, que en la mayoría de las tuplas era "No Superbowl", lo cual era redundante, por lo que creamos una última tabla con solo los ganadores de cada año. 
 
 
 ```{psql}
 \i pipeline_scripts/03_data_normalization.sql
 ```
 
->  Aquí es una buena sección para documentar la descomposición intuitiva de las tablas.
+>  Aquí hay una buena sección para documentar la descomposición intuitiva de las tablas.
 > También un ERD del diseño final debe ser incluido.
 
 
@@ -249,7 +249,7 @@ Para llegar a la 4FN, identificamos dependencias multivaluadas (DMV) en la tabla
 ## Análisis
  Para ver cómo quedaron las tablas normalizadas, consulta el apéndice: 
  
- Para ver el análisis de correlación sobre la relación entre asistencia y rendimiento, consulta el apéndice:
+ Para ver el análisis de correlación sobre la relación entre asistencia y rendimiento, consulta el apéndice: [Relación entre asistencia y rendimiento](https://github.com/AndresIsaac92/propuesta_NFL_Stadiums/blob/main/appendix/Ana%CC%81lisis%20entre%20rendimiento%20y%20asistencia.sql) 
  
  Para ver la predicción de asistencia futura, consulta el apéndice: 
  
