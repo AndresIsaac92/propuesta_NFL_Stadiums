@@ -219,7 +219,7 @@ Algunos registros en la columna `winner` tenían el valor `'NA'`, que no signifi
 
 ### Los Rams y Chargers se tratan como equipos distintos según su ciudad
 
-Al cargar los equipos nos dimos cuenta de que había 34 equipos en lugar de 32. Esto se debe a que los Rams jugaron en St. Louis y luego se mudaron a Los Ángeles, y lo mismo pasó con los Chargers (de San Diego a Los Ángeles). Decidimos tratarlos como equipos separados porque sus estadísticas e historial de asistencia corresponden a ciudades, estadios y contextos completamente distintos. Juntarlos hubiera mezclado datos que no son comparables.
+Al cargar los equipos, nos dimos cuenta de que había 34 equipos en lugar de 32. Esto se debe a que los Rams jugaron en St. Louis y luego se mudaron a Los Ángeles, y lo mismo pasó con los Chargers (de San Diego a Los Ángeles). Decidimos tratarlos como equipos separados porque sus estadísticas e historial de asistencia corresponden a ciudades, estadios y contextos completamente distintos. Juntarlos hubiera mezclado datos que no son comparables.
 
 
 ## Normalización
@@ -254,5 +254,7 @@ Para llegar a la 4FN, identificamos dependencias multivaluadas (DMV) en la tabla
  Para ver la predicción de asistencia futura, consulta el apéndice: 
  
  Para ver el análisis estacional de calendario, consulta el apéndice: 
- 
+
+ ## Presentación
+ [Propuesta NFL Stadiums] ()
  
