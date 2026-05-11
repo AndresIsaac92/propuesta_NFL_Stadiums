@@ -7,7 +7,7 @@ Regina Quevedo López de Cárdenas, CU: 220225, https://github.com/reginaquevedo
 
 Andrés Isaac de la Cruz Sosa, CU:222998, https://github.com/AndresIsaac92
 
-Arie Goldzweig Perez, CU: 221746, https://github.com/goldzweigarie-bit
+Arié Goldzweig Pérez, CU: 221746, https://github.com/goldzweigarie-bit
 
 Carmen Sofía Delgado, CU: 208655, https://github.com/melyDelgado
 
