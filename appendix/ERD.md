@@ -1,4 +1,3 @@
-[ERD_nfl.pdf](https://github.com/user-attachments/files/27613637/ERD_nfl.pdf)
 
 # Tablas normlaizadas 
 
@@ -111,6 +110,8 @@ La tabla de standings tenía una dependencia transitiva. El ganador del Super Bo
 | `winning_team_id`      | id del equipo ganador             | numérico |
 | `winning_team_name`    | Nombre del equipo ganador         | texto    |
 
+# ERD
+[ERD_nfl.pdf](https://github.com/user-attachments/files/27613637/ERD_nfl.pdf)
 
 
 
