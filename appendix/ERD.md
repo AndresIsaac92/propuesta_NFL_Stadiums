@@ -1,5 +1,5 @@
 
-# Tablas normlaizadas 
+# Tablas normalizadas 
 
 ## Tabla staging (attendance)
 Dividimos la tabla staging en 3 tablas para eliminar dependencias parciales y multivaluadas. Originalmente para un mismo equipo y año, existían múltiples semanas y múltiples registros de asistencia que no dependían entre sí, lo que violaba la 4NF. Al separar {team, year} de los registros semanales, se eliminó la duplicidad masiva de datos. Además, aislamos la relación {team_name} → {team} para evitar que la ciudad de un equipo se repitiera innecesariamente en cada fila de asistencia normalizando la entidad del equipo. 
