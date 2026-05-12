@@ -238,6 +238,8 @@ Para llegar a la 4FN, identificamos dependencias multivaluadas (DMV) en la tabla
 
 
 ## Análisis
+⚠️ **Para una mejor visualización, se recomienda abrir y ejecutar estos archivos desde una herramienta de visualización como TablePlus.** ⚠️
+
 Para ver cómo quedaron las tablas normalizadas, consulta el apéndice: [Tablas normalizadas y ERD](https://github.com/AndresIsaac92/propuesta_NFL_Stadiums/blob/main/appendix/ERD.md)
  
 Para ver el análisis de correlación sobre la relación entre asistencia y rendimiento, consulta [el apéndice de relación entre asistencia y rendimiento](https://github.com/AndresIsaac92/propuesta_NFL_Stadiums/blob/main/appendix/asistenciavrendimiento.md).
