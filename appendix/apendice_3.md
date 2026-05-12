@@ -42,7 +42,7 @@ y_pred = reg.predict(X_test)
 y_pred
 ```
 
-El modelo tiene un error absoluto promedio de ~67000 asistentes al año (aproximadamente 6.1%), lo cual es bastante decente considerando que el modelo no distingue entre equpios y no consigue otros factores externos; aquí está un histograma de los residuos (el error de predicción):
+El modelo tiene un error absoluto promedio de ~67000 asistentes al año (aproximadamente 6.1%), lo cual es bastante decente considerando que el modelo no distingue entre equipos y no considera otros factores externos; aquí está un histograma de los residuos (el error de predicción):
 ```
 # Graficamos los residuos, el error por predicción
 residuos = y_test - y_pred
