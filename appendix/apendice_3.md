@@ -1,5 +1,5 @@
 # Análisis predictivo
-Realizamos este pequeño script en Python, desde Jupyther Notebook para mostrar posibles aplicaciones de nuestro proyecto. Aquí se muestran sólo pequeños fragmentos del código, pero se incluyen instrucciones para cargar el script completo.
+Realizamos este pequeño script en Python, desde Jupyter Notebook para mostrar posibles aplicaciones de nuestro proyecto. Aquí se muestran sólo pequeños fragmentos del código, pero se incluyen instrucciones para cargar el script completo.
 Esta pequeña muestra consiste en crear un modelo de regresión múltiple que dadas algunas estadísticas generales de la temporada de un equipo, pueda predecir la asistencia total de la temporada.
 
 Decidimos usar como datos de entrenamiento las primeras 17 temporadas (2000 - 2016) y como datos de prueba las últimas tres (2017 - 2019).
