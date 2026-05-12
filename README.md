@@ -246,10 +246,10 @@ Para llegar a la 4FN, identificamos dependencias multivaluadas (DMV) en la tabla
  
  Para ver el análisis de correlación sobre la relación entre asistencia y rendimiento, consulta el apéndice: [Relación entre asistencia y rendimiento](https://github.com/AndresIsaac92/propuesta_NFL_Stadiums/blob/main/appendix/asistenciavrendimiento.md)
  
- Para ver la predicción de asistencia futura, consulta el apéndice: 
- 
  Para ver el análisis estacional de calendario, consulta el apéndice: 
 
+Para ver un pequeño análisis predictivo que realizamos para mostrar posibles aplicaciones del proyecto, consulta [el apéndice 3](appendix/apendice_3.md).
+ 
  ## Presentación
  [Propuesta NFL Stadiums] ()
  
