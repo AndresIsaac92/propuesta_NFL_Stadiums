@@ -237,18 +237,22 @@ Para la BCNF, verificamos que todo determinante fuera una clave candidata. En nu
 Para llegar a la 4FN, identificamos dependencias multivaluadas (DMV) en la tabla staging. Observamos que para un par (team, year), existía un conjunto independiente de valores para week y weekly_attendance. Por lo que creamos weekly_attendance y seasonal_attendance. Al separarlas, cada tabla contiene una sola "faceta" de la información. No quedan dependencias multivaluadas cruzadas entre ambas tablas, ya que representan conceptos independientes. La tabla games presentaba redundancias similares. Separamos esta en game y en gamestats para evitar repetir las estadísticas si hubiera sido necesario duplicar información del partido. Por último, notamos que en las standings se encontraba sb_winner, que en la mayoría de las tuplas era "No Superbowl", lo cual era redundante, por lo que creamos una última tabla con solo los ganadores de cada año. 
 
 
+## Análisis
+Para ver cómo quedaron las tablas normalizadas, consulta el apéndice: [Tablas normalizadas y ERD](https://github.com/AndresIsaac92/propuesta_NFL_Stadiums/blob/main/appendix/ERD.md)
+ 
+Para ver el análisis de correlación sobre la relación entre asistencia y rendimiento, consulta [el apéndice de relación entre asistencia y rendimiento](https://github.com/AndresIsaac92/propuesta_NFL_Stadiums/blob/main/appendix/asistenciavrendimiento.md).
+Para ejecutar el script, en la consola utilice el comando:
 ```{psql}
-\i pipeline_scripts/03_data_normalization.sql
+\i pipeline_scripts/Analisis entre rendimiento y asistencia.sql
+```
+ 
+Para ver el análisis estacional de calendario, consulta [el apéndice 2](appendix/apendice_2.md).
+Para ejecutar el script, en la consola utilice el comando:
+```{psql}
+\i pipeline_scripts/analisis_estacional_1.sql
 ```
 
-## Análisis
- Para ver cómo quedaron las tablas normalizadas, consulta el apéndice: [Tablas normalizadas y ERD](https://github.com/AndresIsaac92/propuesta_NFL_Stadiums/blob/main/appendix/ERD.md)
- 
- Para ver el análisis de correlación sobre la relación entre asistencia y rendimiento, consulta el apéndice: [Relación entre asistencia y rendimiento](https://github.com/AndresIsaac92/propuesta_NFL_Stadiums/blob/main/appendix/asistenciavrendimiento.md)
- 
- Para ver el análisis estacional de calendario, consulta el apéndice: 
-
-Para ver un pequeño análisis predictivo que realizamos para mostrar posibles aplicaciones del proyecto, consulta [el apéndice 3](appendix/apendice_3.md).
+Para ver un pequeño análisis predictivo que realizamos en Jupyter Notebook para mostrar posibles aplicaciones del proyecto, consulta [el apéndice 3](appendix/apendice_3.md).
  
  ## Presentación
  [Propuesta NFL Stadiums] ()
