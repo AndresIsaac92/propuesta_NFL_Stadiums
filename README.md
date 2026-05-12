@@ -243,7 +243,7 @@ Para ver cómo quedaron las tablas normalizadas, consulta el apéndice: [Tablas 
 Para ver el análisis de correlación sobre la relación entre asistencia y rendimiento, consulta [el apéndice de relación entre asistencia y rendimiento](https://github.com/AndresIsaac92/propuesta_NFL_Stadiums/blob/main/appendix/asistenciavrendimiento.md).
 Para ejecutar el script, en la consola utilice el comando:
 ```{psql}
-\i pipeline_scripts/Analisis entre rendimiento y asistencia.sql
+\i pipeline_scripts/Analisis_entre_rendimiento_y_asistencia.sql
 ```
  
 Para ver el análisis estacional de calendario, consulta [el apéndice 2](appendix/apendice_2.md).
