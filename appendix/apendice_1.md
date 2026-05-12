@@ -11,7 +11,8 @@ Es decir, deben de estar guardados en la misma carpeta que los archivos del repo
 
 Esta carpeta con los archivos del repositorio y los datos guardados se debería de ver algo así:
 
-<img width="794" height="158" alt="Captura de pantalla 2026-05-07 234057" src="https://github.com/user-attachments/assets/d24fe9b5-eabb-484e-90bd-8514f98f3878" />
+<img width="669" height="191" alt="Captura de pantalla 2026-05-11 232915" src="https://github.com/user-attachments/assets/5d3b3b20-7fa5-4eb8-8903-f4843bd84593" />
+
 
 
 ## Paso 3: Preparación en `psql` antes de ejecutar los scripts de SQL
