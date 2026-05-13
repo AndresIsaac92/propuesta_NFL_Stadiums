@@ -9,7 +9,7 @@ Andrés Isaac de la Cruz Sosa, CU:222998, https://github.com/AndresIsaac92
 
 Arié Goldzweig Pérez, CU: 221746, https://github.com/goldzweigarie-bit
 
-Carmen Sofía Delgado, CU: 208655, https://github.com/melyDelgado
+Carmen Sofía Delgado Escobar, CU: 208655, https://github.com/melyDelgado
 
 
 ## Introducción
@@ -78,6 +78,8 @@ La entidad `games` contiene los siguientes atributos, con los tipos de datos ori
 | `away_team_name` | Nombre del equipo visitante               | texto    |
 | `away_team_city` | Ciudad del equipo visitante               | texto    |
 
+
+## Objetivo
 
 El objetivo de estos datos es realizar un análisis de cómo la asistencia al estadio y el rendimiento se afectan. ¿Una buena asistencia causa un buen rendimiento, o el buen rendimiento de un equipo produce mejor asistencia? ¿Cuáles son los equipos que más llenan su estadio? Este análisis puede ser aplicado en predicciones deportivas y análisis de datos interno de los equipos. 
 
