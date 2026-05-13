@@ -1,14 +1,16 @@
 
 # Tablas normalizadas 
 
-## Tabla staging (attendance)
-Dividimos la tabla staging en 3 tablas para eliminar dependencias parciales y multivaluadas. Originalmente para un mismo equipo y año, existían múltiples semanas y múltiples registros de asistencia que no dependían entre sí, lo que violaba la 4NF. Al separar {team, year} de los registros semanales, se eliminó la duplicidad masiva de datos. Además, aislamos la relación {team_name} → {team} para evitar que la ciudad de un equipo se repitiera innecesariamente en cada fila de asistencia normalizando la entidad del equipo. 
+## Tabla attendance
+Se dividió en 3 entidades para resolver duplicidad de datos: Team (datos del equipo), SeasonalAttendance (totales de asistencia por temporada) y WeeklyAttendance (registros semanana por semana). Esto eliminó la repetición masiva de nombre y ciudad del equipo en cada fila. 
 
 ## Tabla Games
-Cambiamos la tabla games principalmente por las dependencias funcionales parciales y transitivas. Los nombres y ciudades de los equipos dependían de los IDs de los equipos y no del game_id en sí mismo. Al aplicar la normalización, lo que hicimos fue extraer el nombre y la ciudad del equipo en la tabla Team, dejando 2 tablas, una de Games, con los resultados del partido, y otra GameStats con las estadísticas del partido.
+Se separa en Game (reusltados del partido) y GameStats (estadísticas del partido), porque los datos estadísticos dependían del partido, no de los equipos involucrados. Además, el nombre y ciudad del equipo se movieron a Team. 
 
 ## Tabla Standings
-La tabla de standings tenía una dependencia transitiva. El ganador del Super Bowl dependía únicmanete del año {year} → {sb_winner}, por lo cual, separamos estos datos en otra tabla, para evitar inconsistencias. Al igual que en otras tablas, el nombre y la ciudad del equipo s emovieron a otra tabla. 
+En la tabla standings, identificamos que el ganador del SuperBowl dependía solo del año, por lo que se extrajo a una tabla independiente SuperBowl. Los datos del equipo también se movieron a Team. 
+
+La normalización resultó en 8 tablas finales las cuales se vincula mediante llaves foráneas a Team y Season, que actúan como entidades centrales del modelo. Las tablas resultantes son las siguentes: 
 
 
 ### Tabla Team
