@@ -112,48 +112,45 @@ La tabla de standings tenía una dependencia transitiva. El ganador del Super Bo
 
 # ERD
 
-### ERD después de la normalización
+## ERD después de la normalización
 <img width="2904" height="2244" alt="ERD_nfl_después" src="https://github.com/user-attachments/assets/84fd24a8-d350-409f-8337-b60fe59047a5" />
 
 
-Team → WeeklyAttendance (O2M) 
+#### Team → WeeklyAttendance (O2M) 
 Un equipo puede tener muchos registros de asistencia semanal, o ninguno. Cada registro debe pertenecer necesariamente a un solo equipo. 
 
-Season → WeeklyAttendance (O2M)
+#### Season → WeeklyAttendance (O2M)
 Una temporada puede tener muchos registros semanales, o ninguno. Cada registro semanal debe pertenecer necesariamente a una temporada. 
 
-Team → SeasonalAttendance (O2M)
+#### Team → SeasonalAttendance (O2M)
 Tiene la misma relación que el equipo y la asistencia semanal, pero aquí se totalizan los datos de asistencia por temporada completa. 
 
-Season → SeasonalAttendance (O2M)
+#### Season → SeasonalAttendance (O2M)
 Una temporada puede tener muchos registros de asistencia para muchos equipos. Cada registro debe pertenecer necesariamente a una sola temporada. 
 
-Season → Game (O2M)
+#### Season → Game (O2M)
 Una temporada tiene muchos partidos o ninguno y cada juego debe pertenecer necesariamente a una temporada. 
 
-Team → Game (O2M)
-home_team_id
-Un equipo puede ser local en muchos partidos o en ninguno. Cada partido debe tener obligatoriamente un equipo local.
+#### Team → Game (O2M)
+home_team_id: Un equipo puede ser local en muchos partidos o en ninguno. Cada partido debe tener obligatoriamente un equipo local.
 
-away_team_id
-Un equipo puede ser visitante en muchos partidos, o en ninguno. Cada partido debe tener obligatoriamente un equipo visitante. 
+away_team_id: Un equipo puede ser visitante en muchos partidos, o en ninguno. Cada partido debe tener obligatoriamente un equipo visitante. 
 
-winner_id
-Un equipo puede ganar muchos partidos o ninguno y un partido puede tener un ganador o no tenerlo en caso de empate.  
+winner_id: Un equipo puede ganar muchos partidos o ninguno y un partido puede tener un ganador o no tenerlo en caso de empate.  
 
-Game → GameStats (O2O)
+#### Game → GameStats (O2O)
 Cada partido deb tener exactamente un registro de estadísticas y cada registro de estadísticas pertenece obligatoriamente a un solo partido. 
 
-Team → Standings (O2M)
+#### Team → Standings (O2M)
 Un equipo puede tener muchas entradas en standings, una por temporada, o ninguna. Cada registro de standings debe pertenecer obligatoriamente a un solo equipo. 
 
-Season → Standings (O2M)
+#### Season → Standings (O2M)
 Una temporada puede tener muchas entradas de standings, una por equipo o ninguna. Cada registro de standings debe pertenecer obligatoriamente a una sola temporada.
 
-Season → SuperBowl (O2O)
+#### Season → SuperBowl (O2O)
 Cada temporada debe tener exactamente un Super Bowl y cada Super Bowl pertenece obligatoriamente a una sola temporada. 
 
-Team → SuperBowl (O2M)
+#### Team → SuperBowl (O2M)
 Un equipo puede ganar muchos Super Bowl o ninguno y cada Super Bowl debe tener obligatoriamente un equipo.
 
 
