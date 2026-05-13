@@ -114,7 +114,8 @@ La tabla de standings tenía una dependencia transitiva. El ganador del Super Bo
 
 ## ERD antes de normalización
 
-[ERD_nfl_antes.pdf](https://github.com/user-attachments/files/27720169/ERD_nfl_antes.pdf)
+<img width="2904" height="2244" alt="ERD_nfl_antes" src="https://github.com/user-attachments/assets/46ec87c6-f3a2-4b17-88ce-8ac884a22f4b" />
+
 
 #### Attendance → games
 Un registro de asistencia puede corresponder a cero o más paritdos en games para esa semana y año. Es opcional porque tienen una semana de descanso. Identifica los partidos por home_team / away_team y por la unión de year + week+ home_team p away_team. 
