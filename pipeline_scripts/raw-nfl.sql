@@ -69,3 +69,37 @@ CREATE TABLE raw.standings (
 \COPY raw.attendance (team, team_name, year, total, home, away, week, weekly_attendance) FROM './data/attendance.csv' WITH (FORMAT CSV, HEADER true, DELIMITER ',');
 \COPY raw.games (year, week, home_team, away_team, winner, tie, day, date, time, pts_win, pts_loss, yds_win, turnovers_win, yds_loss, turnovers_loss, home_team_name, home_team_city, away_team_name, away_team_city) FROM './data/games.csv' WITH (FORMAT CSV, HEADER true, DELIMITER ',');
 \COPY raw.standings (team, team_name, year, wins, loss, points_for, points_against, points_differential, margin_of_victory, strength_of_schedule, simple_rating, offensive_ranking, defensive_ranking, playoffs, sb_winner) FROM './data/standings.csv' WITH (FORMAT CSV, HEADER true, DELIMITER ',');
+
+
+--ANALISIS PRELIMINAR
+--No. de tuplas
+SELECT COUNT(*)
+FROM raw.attendance;
+
+SELECT COUNT(*)
+FROM raw.games;
+
+SELECT COUNT(*)
+FROM raw.standings;
+
+--No. de valores nulos
+SELECT COUNT(*)
+FROM raw.attendance
+WHERE weekly_attendance LIKE 'NA';
+
+SELECT COUNT(*)
+FROM raw.standings
+WHERE wins IS NULL OR loss IS NULL OR points_for IS NULL OR points_against IS NULL OR points_differential IS NULL OR margin_of_victory IS NULL OR strength_of_schedule IS NULL OR simple_rating IS NULL OR offensive_ranking IS NULL OR defensive_ranking IS NULL;
+
+--mínimos, maximos y promedios
+--puntos a favor, en contra, y diferencia
+SELECT MIN(points_for) AS min_points_for,
+       AVG(points_for) AS avg_points_for,
+       MAX(points_for) AS max_points_for,
+       MIN(points_against) AS min_points_against,
+       AVG(points_against) AS avg_points_against,
+       MAX(points_against) AS max_points_against,
+       MIN(points_differential) AS min_points_diff,
+       AVG(points_differential) AS avg_points_diff,
+       MAX(points_differential) AS max_points_diff
+FROM raw.standings;
