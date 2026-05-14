@@ -1,7 +1,11 @@
 # Instrucciones paso a paso para la replicación
 
 ## Paso 1: Descargar los archivos del repositorio
-Desde [la página principal del repositorio](https://github.com/AndresIsaac92/propuesta_NFL_Stadiums), presionamos <> Code (el botón verde al lado izquierdo de la descripción) y escogemos la opción Download ZIP.
+Desde [la página principal del repositorio](https://github.com/AndresIsaac92/propuesta_NFL_Stadiums), presionamos <> Code (el botón verde al lado izquierdo de la descripción) y escogemos la opción Download ZIP. O, si tenemos instalado git, desde la terminal de `psql`, ejecutamos el comando:
+```
+git clone https://github.com/AndresIsaac92/propuesta_NFL_Stadiums.git
+```
+
 Esto descargará un archivo comprimido con todos los archivos del repositorio. A continuación, debemos extraer todos los documentos a una misma carpeta (no comprimida).
 
 ## Paso 2: Descargar los datos originales
@@ -49,6 +53,11 @@ Ahora sí, ejecutamos el script de carga con:
 \i pipeline_scripts/raw-nfl.sql
 ```
 
+El script de limpieza con:
+```
+\i pipeline_scripts/limpieza.sql
+```
+
 Y el script de normalización con:
 ```
 \i pipeline_scripts/Normalizacion.sql
@@ -56,4 +65,4 @@ Y el script de normalización con:
 
 ## Paso 5 (opcional): Visualización con una herramienta con mejor UI como TablePlus
 Ahora, podemos abrir TablePlus (o alguna otra herramienta) y crear una nueva conexión con el mismo usuario y contraseña que en `psql`, y la base de datos `nfl`.
-Ahora tenemos, finalmente, los datos cargados y listos para ser visualizados o realizar consultas con ellos.
+Ahora tenemos, finalmente, los datos cargados y listos para ser visualizados o realizar consultas con ellos. Se recomienda abrir y ejecutar los scripts de los análisis con TablePlus, DataGrip, u otra herramienta para la visualización.
