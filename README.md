@@ -78,7 +78,7 @@ ejecute el siguiente comando en la consola de `psql`:
 
 ## Análisis preliminar
 
-Número de tuplas por entidad:
+Número de tuplas por entidad: `attendance` tiene 10846. `games` tiene 5324. `standings` tiene 638.
 ```
 SELECT COUNT(*)
 FROM raw.attendance;
@@ -91,7 +91,7 @@ FROM raw.standings;
 ```
 
 
-Número de valores nulos:
+Número de valores nulos: hay 638 instancias de weekly_attendance teniendo un valor nulo.
 ```
 SELECT COUNT(*)
 FROM raw.attendance
