@@ -64,6 +64,7 @@ Las instrucciones de replicación del proyecto asumen que los datos se encuentra
 2. Contar con `postgres 16` o superior instalado en la computadora o servidor donde se replicará el proyecto.
 3. Contar con una base de datos exclusiva para este proyecto. Todas las instrucciones del proyecto asumen que la sesión está conectada a la misma base de datos.
 4. El resto de las instrucciones asume que el directorio de trabajo para `psql` es la raíz de este proyecto.
+5. Para poder replicar el modelo predictivo de asistencia, tener instalado Jupyter Notebook conforme a las instrucciones del [apéndice 3](appendix/apendice_3.md).
 
 **Para ver instrucciones paso a paso de la replicación, ver el [Apéndice 1: Instrucciones de replicación](appendix/apendice_1.md).**
 
@@ -120,6 +121,11 @@ La mejor defensiva recibió 165, la peor recibió 517, y en promedio las defensi
 Así, la mejor diferencia de puntos es de 315, la peor de -261, y el promedio es 0. Esto nos ayuda a corroborar la consistencia del set de datos.
 
 ## Limpieza de datos
+
+Para ejecutar el script de limpieza, ejecute en la consola:
+```{psql}
+\i pipeline_scripts/limpieza.sql
+```
 
 ### Estandarización
 Las tablas estaban bastante limpias, pero aún así hubo algunas cosas que tuvimos que considerar. Hicimos algunos de estos cambios en `limpieza.sql`, pero la mayoría se hicieron como cambios a la hora de diseñar las nuevas tablas en `Normalizacion.sql`.
@@ -196,6 +202,11 @@ No encontramos ninguna.
 
 
 ## Normalización
+
+Para ejecutar el script de normalización y creación de las nuevas tablas bajo el diseño descrito a continuación, ejecute en la consola:
+```{psql}
+\i pipeline_scripts/Normalizacion.sql
+```
 
 La base de datos original constaba de tres tablas principales: standings (asistencia), games (partidos) y standings (clasificaciones). Debido a que los datos estaban muy limpios, sustituimos la parte del proyecto de limpieza por normalización hasta la Cuarta Forma Normal. La base de datos original presentaba redundancias y dependencias funcionales y multivaluadas que podían causar anomalías en las operaciones de inserción, actualización y eliminación. 
 
