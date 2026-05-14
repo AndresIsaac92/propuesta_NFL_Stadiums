@@ -11,8 +11,14 @@ Arié Goldzweig Pérez, CU: 221746, https://github.com/goldzweigarie-bit
 
 Carmen Sofía Delgado Escobar, CU: 208655, https://github.com/melyDelgado
 
+## Objetivo
 
-## Introducción
+El objetivo de este proyecto es diseñar una base de datos profesional, limpia y aplicable para poder responder las siguientes preguntas: ¿Cómo afecta la asistencia al estadio el rendimiento de un equipo? ¿Cómo afectan el día o la hora de juego el resultado de
+un partido? ¿Nos pueden ayudar las estadísticas deportivas a predecir la asistencia a los estadios?​
+
+Las implicaciones éticas que conlleva este análisis incluyen, pero no se limitan a su uso para hacer apuestas deportivas o los efectos que su uso en el análisis interno de los equipos pueda tener en el precio o disponibilidad de los boletos para los juegos.
+
+## Introducción a los datos originales
 
 La base de datos NFL Stadium Attendance contiene información sobre la asistencia a los estadios de la NFL a lo largo de múltiples temporadas. 
 Está compuesto por 3 tablas principales: games, attendance y standings, que se relacionan con los atributos team, year y week.  
@@ -22,16 +28,9 @@ Se espera una actualización anual, aunque la última fue hace 2 años.
 
 Para ver las columnas y tipos de datos por entidad originales, [leer el apéndice raw_entities](appendix/raw_entities.md).
 
-## Objetivo
-
-El objetivo de estos datos es realizar un análisis de cómo la asistencia al estadio y el rendimiento se afectan. ¿Una buena asistencia causa un buen rendimiento, o el buen rendimiento de un equipo produce mejor asistencia? ¿Cuáles son los equipos que más llenan su estadio? Este análisis puede ser aplicado en predicciones deportivas y análisis de datos interno de los equipos. 
-
-Las implicaciones éticas que conlleva este análisis incluyen, pero no se limitan a su uso para hacer apuestas deportivas o los efectos que su uso en el análisis interno de los equipos pueda tener en el precio o disponibilidad de los boletos para los juegos. 
-
-
 ### Fuente de datos
 
-Para este proyecto se utilizan los datos que fueron subidos a Kaggle por Sunjay Kapadnis y están disponibles en https://www.kaggle.com/datasets/sujaykapadnis/nfl-stadium-attendance-dataset. 
+Para este proyecto se utilizan los datos que fueron subidos a Kaggle por Sunjay Kapadnis y están disponibles en [esta liga](https://www.kaggle.com/datasets/sujaykapadnis/nfl-stadium-attendance-dataset). 
 No se incluyó un propósito explícito para su recolección. 
 
 Las instrucciones de replicación del proyecto asumen que los datos se encuentran almacenados en formato
@@ -64,36 +63,119 @@ Las instrucciones de replicación del proyecto asumen que los datos se encuentra
 1. Descargar los datos en bruto del proyecto de acuerdo a las instrucciones del apartado de [Fuente de datos](#fuente-de-datos).
 2. Contar con `postgres 16` o superior instalado en la computadora o servidor donde se replicará el proyecto.
 3. Contar con una base de datos exclusiva para este proyecto. Todas las instrucciones del proyecto asumen que la sesión está conectada a la misma base de datos.
-4. ...
-5. El resto de las instrucciones asume que el directorio de trabajo para `psql` es la raíz de este proyecto.
+4. El resto de las instrucciones asume que el directorio de trabajo para `psql` es la raíz de este proyecto.
 
-#### Para ver instrucciones paso a paso de la replicación, ver el [Apéndice 1: Instrucciones de replicación](appendix/apendice_1.md).
+**Para ver instrucciones paso a paso de la replicación, ver el [Apéndice 1: Instrucciones de replicación](appendix/apendice_1.md).**
 
 ## Carga inicial
 
-En primer lugar, se deberá crear una base de datos exclusiva para este proyecto. Para ello se puede ejecutar el siguiente 
-Comando en `psql`:
-
-```{psql}
-CREATE DATABASE nfl;
-```
-
-Posteriormente, debemos conectarnos a dicha base de datos:
-
-```{psql}
-\c nfl
-```
-
-Finalmente, para cargar los datos en bruto se debe ejecutar el siguiente comando en una sesión de línea de comandos `psql`:
-
+Tras seguir las instrucciones iniciales de replicación, para ejecutar el script de carga y análisis preliminar,
+ejecute el siguiente comando en la consola de `psql`:
 ```{psql}
 \i pipeline_scripts/raw-nfl.sql
 ```
 
 ## Análisis preliminar
 
-En nuestra primera revisión de la base de datos, encontramos muy pocos errores de limpieza. De hecho, intentamos "romper" la base de datos de varias formas:
+Número de tuplas por entidad:
+```
+SELECT COUNT(*)
+FROM raw.attendance;
 
+SELECT COUNT(*)
+FROM raw.games;
+
+SELECT COUNT(*)
+FROM raw.standings;
+```
+
+
+Número de valores nulos:
+```
+SELECT COUNT(*)
+FROM raw.attendance
+WHERE weekly_attendance LIKE 'NA';
+
+SELECT COUNT(*)
+FROM raw.standings
+WHERE wins IS NULL OR loss IS NULL OR points_for IS NULL OR points_against IS NULL OR points_differential IS NULL OR margin_of_victory IS NULL OR strength_of_schedule IS NULL OR simple_rating IS NULL OR offensive_ranking IS NULL OR defensive_ranking IS NULL;
+
+```
+
+Mínimo, máximo y promedio de puntos a favor, en contra, y diferencia de puntos en una temporada:
+```
+SELECT MIN(points_for) AS min_points_for,
+       AVG(points_for) AS avg_points_for,
+       MAX(points_for) AS max_points_for,
+       MIN(points_against) AS min_points_against,
+       AVG(points_against) AS avg_points_against,
+       MAX(points_against) AS max_points_against,
+       MIN(points_differential) AS min_points_diff,
+       AVG(points_differential) AS avg_points_diff,
+       MAX(points_differential) AS max_points_diff
+FROM raw.standings;
+```
+Históricamente, la peor ofensiva hizo 161 puntos, la mejor ofensiva hizo 606, y en promedio las ofensivas hacen 350.3.
+La mejor defensiva recibió 165, la peor recibió 517, y en promedio las defensivas reciben 350.3. Nótese que esto hace sentido, pues todos los puntos anotados históricamente en promedio deben haber sido recibidos por la defensiva.
+Así, la mejor diferencia de puntos es de 315, la peor de -261, y el promedio es 0. Esto nos ayuda a corroborar la consistencia del set de datos.
+
+## Limpieza de datos
+
+### Estandarización
+Las tablas estaban bastante limpias, pero aún así hubo algunas cosas que tuvimos que considerar. Hicimos algunos de estos cambios en `limpieza.sql`, pero la mayoría se hicieron como cambios a la hora de diseñar las nuevas tablas en `Normalizacion.sql`.
+
+**La columna `playoffs` venía como texto, no como boolean**
+
+En el CSV, la columna `playoffs` no decía simplemente `true` o `false`, sino  `Playoffs`. Para que la base de datos lo entendiera como un valor de sí/no, tuvimos que convertirlo manualmente:
+
+```
+ CASE 
+        WHEN st.playoffs = 'Playoffs' THEN TRUE 
+        ELSE FALSE 
+    END AS made_playoffs
+```
+
+**Se borraron las tuplas en raw.asistencia donde weekly_assistance era nulo**
+
+Algunos registros de asistencia semanal no tenían valor. Eso no significa que el dato esté mal: simplemente esa semana el equipo no jugó en casa. Por eso decidimos no incluir esas filas en lugar de poner un 0 o inventar un número. Poner 0 hubiera hecho parecer que el estadio estuvo vacío, cuando en realidad no hubo partido.
+
+```
+DELETE FROM raw.attendance
+    WHERE weekly_attendance LIKE 'NA';
+
+ALTER TABLE raw.attendance ADD COLUMN weekly_att_temp BIGINT;
+UPDATE raw.attendance SET weekly_att_temp = CAST(weekly_attendance AS BIGINT);
+
+ALTER TABLE raw.attendance DROP COLUMN weekly_attendance;
+ALTER TABLE raw.attendance RENAME weekly_att_temp TO weekly_attendance;
+```
+
+**Las fechas y horas se guardaron como texto**
+
+Los campos de fecha y hora del CSV no tenían un formato consistente, lo que hacía difícil convertirlos directamente a un formato de fecha real. Para no perder información, los guardamos tal como venían (como texto). Si en el futuro se necesita operar con ellos como fechas reales, se puede hacer la conversión en ese momento.
+
+**Los nombres de equipos se limpiaron antes de hacer los joins**
+
+Al relacionar los datos de partidos con la tabla de equipos, nos dimos cuenta de que algunos nombres tenían espacios de más o diferencias entre mayúsculas y minúsculas. Para evitar que eso rompiera la conexión entre tablas, aplicamos `TRIM()` (quitar espacios) y `LOWER()` (convertir a minúsculas) en ambos lados de la comparación:
+
+```sql
+INNER JOIN Team home_team ON TRIM(LOWER(home_team.full_name)) = TRIM(LOWER(g.home_team_name))
+```
+
+Sin esto, partidos con nombres como "New England Patriots " (con espacio al final) no se habrían encontrado con su equipo correspondiente y se habrían perdido.
+
+
+**Los Rams y Chargers se tratan como equipos distintos según su ciudad**
+
+Al cargar los equipos, nos dimos cuenta de que había 34 equipos en lugar de 32. Esto se debe a que los Rams jugaron en St. Louis y luego se mudaron a Los Ángeles, y lo mismo pasó con los Chargers (de San Diego a Los Ángeles). Decidimos tratarlos como equipos separados porque sus estadísticas e historial de asistencia corresponden a ciudades, estadios y contextos completamente distintos. Juntarlos hubiera mezclado datos que no son comparables.
+
+
+### Revisión de consistencia
+
+Tras haber limpiado, con la siguiente consulta, sacada de `Normalizacion.sql`, intentamos encontrar inconsistencias en la base de datos.
+No encontramos ninguna.
+
+```
     -- Ver NULLs en asistencia
     SELECT COUNT(*) FROM staging WHERE weekly_attendance IS NULL;
 
@@ -110,66 +192,12 @@ En nuestra primera revisión de la base de datos, encontramos muy pocos errores 
 
     -- Ver partidos donde home = away
     SELECT * FROM games WHERE home_team_name = away_team_name;
-
-Sin embargo, no encontramos ningún error. Aun así, notamos ciertas cosas interesantes. Por ejemplo, no sabíamos que ciertos equipos se cambiaban de ciudad, por lo que los equipos (que deberían ser 32) resultaron ser 34. Por lo que consideramos a los Rams de Los Ángeles y de St. Louis y los Chargers de San Diego y de Los Ángeles como equipos diferentes. Por otro lado, el ranking debía ser positivo, por lo que tuvimos que agregar una condición que permitiera esta modificación. Más allá de esto, no encontramos ninguna otra cosa que necesitáramos limpiar.  
-
-## Limpieza de datos
-
-Como el análisis preliminar no encontró errores graves en los datos, la limpieza consistió principalmente en ajustes necesarios para que todo funcionara correctamente al cargar la información al nuevo esquema. A continuación explicamos qué hicimos y por qué.
-
-### La columna `playoffs` venía como texto, no como verdadero/falso
-
-En el CSV, la columna `playoffs` no decía simplemente `true` o `false`, sino cosas como `'Yes'`, `'TRUE'` o `'1'` dependiendo del registro. Para que la base de datos lo entendiera como un valor de sí/no, tuvimos que convertirlo manualmente:
-
-```sql
-CASE 
-    WHEN st.playoffs = 'Yes' OR st.playoffs = 'TRUE' OR st.playoffs = '1' THEN TRUE 
-    ELSE FALSE 
-END AS made_playoffs
 ```
-
-Lo hicimos así porque si hubiéramos dejado el texto tal cual, no podríamos hacer consultas sencillas como "dame todos los equipos que sí llegaron a playoffs".
-
-### Las semanas sin asistencia se dejaron vacías a propósito
-
-Algunos registros de asistencia semanal no tenían valor. Eso no significa que el dato esté mal: simplemente esa semana el equipo no jugó en casa. Por eso decidimos no incluir esas filas en lugar de poner un 0 o inventar un número. Poner 0 hubiera hecho parecer que el estadio estuvo vacío, cuando en realidad no hubo partido.
-
-### Las fechas y horas se guardaron como texto
-
-Los campos de fecha y hora del CSV no tenían un formato consistente, lo que hacía difícil convertirlos directamente a un formato de fecha real. Para no perder información, los guardamos tal como venían (como texto). Si en el futuro se necesita operar con ellos como fechas reales, se puede hacer la conversión en ese momento.
-
-### Tuvimos que quitar una regla que no dejaba guardar rankings de 0
-
-Al diseñar la tabla, pusimos una regla que decía que los rankings debían ser mayores o iguales a 1. Sin embargo, los datos reales tenían algunos valores de 0, lo que hacía que el sistema rechazara esos registros. Tuvimos que eliminar esa restricción para poder cargar todos los datos:
-
-```sql
-ALTER TABLE Standing DROP CONSTRAINT IF EXISTS ranking_positive;
-```
-
-El 0 en este caso es un valor válido del dataset original, no un error.
-
-### Los nombres de equipos se limpiaron antes de hacer los joins
-
-Al relacionar los datos de partidos con la tabla de equipos, nos dimos cuenta de que algunos nombres tenían espacios de más o diferencias entre mayúsculas y minúsculas. Para evitar que eso rompiera la conexión entre tablas, aplicamos `TRIM()` (quitar espacios) y `LOWER()` (convertir a minúsculas) en ambos lados de la comparación:
-
-```sql
-INNER JOIN Team home_team ON TRIM(LOWER(home_team.full_name)) = TRIM(LOWER(g.home_team_name))
-```
-
-Sin esto, partidos con nombres como "New England Patriots " (con espacio al final) no se habrían encontrado con su equipo correspondiente y se habrían perdido.
-
-### Los partidos con ganador `'NA'` se excluyeron
-
-Algunos registros en la columna `winner` tenían el valor `'NA'`, que no significa empate ni ningún equipo real: es simplemente un valor vacío mal codificado en el CSV. Esos registros se filtraron para no meter basura en la tabla de partidos. Los empates reales sí están contemplados en la columna `is_tie`.
-
-### Los Rams y Chargers se tratan como equipos distintos según su ciudad
-
-Al cargar los equipos, nos dimos cuenta de que había 34 equipos en lugar de 32. Esto se debe a que los Rams jugaron en St. Louis y luego se mudaron a Los Ángeles, y lo mismo pasó con los Chargers (de San Diego a Los Ángeles). Decidimos tratarlos como equipos separados porque sus estadísticas e historial de asistencia corresponden a ciudades, estadios y contextos completamente distintos. Juntarlos hubiera mezclado datos que no son comparables.
 
 
 ## Normalización
 
-La base de datos original constaba de tres tablas principales: staging (asistencia), games (partidos) y standings (clasificaciones). Debido a que los datos estaban muy limpios, sustituimos la parte del proyecto de limpieza por normalización hasta la Cuarta Forma Normal. La base de datos original presentaba redundancias y dependencias funcionales y multivaluadas que podían causar anomalías en las operaciones de inserción, actualización y eliminación. 
+La base de datos original constaba de tres tablas principales: standings (asistencia), games (partidos) y standings (clasificaciones). Debido a que los datos estaban muy limpios, sustituimos la parte del proyecto de limpieza por normalización hasta la Cuarta Forma Normal. La base de datos original presentaba redundancias y dependencias funcionales y multivaluadas que podían causar anomalías en las operaciones de inserción, actualización y eliminación. 
 
 Las tablas originales ya cumplían con 1FN, ya que no había grupos repetitivos ni listas dentro de las celdas. Por ejemplo, cada asistencia semanal estaba en una fila separada, y cada partido tenía sus propias estadísticas en una fila individual.
 	
@@ -180,6 +208,26 @@ También detectamos dependencias transitivas. Por ejemplo, en la tabla staging o
 Para la BCNF, verificamos que todo determinante fuera una clave candidata. En nuestras tablas, las dependencias funcionales restantes cumplían esta condición, por lo que ya estábamos en BCNF.
 	
 Para llegar a la 4FN, identificamos dependencias multivaluadas (DMV) en la tabla staging. Observamos que para un par (team, year), existía un conjunto independiente de valores para week y weekly_attendance. Por lo que creamos weekly_attendance y seasonal_attendance. Al separarlas, cada tabla contiene una sola "faceta" de la información. No quedan dependencias multivaluadas cruzadas entre ambas tablas, ya que representan conceptos independientes. La tabla games presentaba redundancias similares. Separamos esta en game y en gamestats para evitar repetir las estadísticas si hubiera sido necesario duplicar información del partido. Por último, notamos que en las standings se encontraba sb_winner, que en la mayoría de las tuplas era "No Superbowl", lo cual era redundante, por lo que creamos una última tabla con solo los ganadores de cada año. 
+
+
+## Análisis
+⚠️ **Para una mejor visualización, se recomienda abrir y ejecutar estos archivos desde una herramienta de visualización como TablePlus.** ⚠️
+
+Para ver cómo quedaron las tablas normalizadas, consulta el apéndice: [Tablas normalizadas y ERD](appendix/ERD.md)
+ 
+Para ver el análisis de correlación sobre la relación entre asistencia y rendimiento, consulta [el apéndice de relación entre asistencia y rendimiento](appendix/asistenciavrendimiento.md).
+Para ejecutar el script, en la consola utilice el comando:
+```{psql}
+\i pipeline_scripts/Analisis_entre_rendimiento_y_asistencia.sql
+```
+ 
+Para ver el análisis estacional de calendario, consulta [el apéndice 2](appendix/apendice_2.md).
+Para ejecutar el script, en la consola utilice el comando:
+```{psql}
+\i pipeline_scripts/analisis_estacional_1.sql
+```
+
+Para ver un pequeño análisis predictivo que realizamos en Jupyter Notebook para mostrar posibles aplicaciones del proyecto, consulta [el apéndice 3](appendix/apendice_3.md).
 
 
 ## Conclusión 
@@ -200,28 +248,5 @@ El modelo de regresión logró predecir la asistencia anual con un margen de err
 
 Si los Cowboys terminan una temporada con 11 victorias, alto margen de victoria y clasifican a playoffs, el modelo podría estimar su asistencia esperada para la siguiente temporada y compararlo con su capacidad real, ayudando a la franquicia a tomar decisiones de precios, patrocinios o incluso expansión de estadio con base en datos, no solo en intuición.
 
-En conslusión, los análisis confirman que el rendimiento, el calendario y las estadísticas de temporada son variables que pueden explicar la realidad sobre la dinámica de los estadios de la NFL, y que una base de datos bien estructurada es la condición necesaria para hacer este tipo de preguntas. En esta materia y en este proyecto aprendimos la importancia de saber limpiar y manipular los datos para responder preguntas complejas, que pueden impactar las decisiones de un equipo mediante consultas y el buen manejo de los datos. 
-
-
-## Análisis
-⚠️ **Para una mejor visualización, se recomienda abrir y ejecutar estos archivos desde una herramienta de visualización como TablePlus.** ⚠️
-
-Para ver cómo quedaron las tablas normalizadas, consulta el apéndice: [Tablas normalizadas y ERD](https://github.com/AndresIsaac92/propuesta_NFL_Stadiums/blob/main/appendix/ERD.md)
- 
-Para ver el análisis de correlación sobre la relación entre asistencia y rendimiento, consulta [el apéndice de relación entre asistencia y rendimiento](https://github.com/AndresIsaac92/propuesta_NFL_Stadiums/blob/main/appendix/asistenciavrendimiento.md).
-Para ejecutar el script, en la consola utilice el comando:
-```{psql}
-\i pipeline_scripts/Analisis_entre_rendimiento_y_asistencia.sql
-```
- 
-Para ver el análisis estacional de calendario, consulta [el apéndice 2](appendix/apendice_2.md).
-Para ejecutar el script, en la consola utilice el comando:
-```{psql}
-\i pipeline_scripts/analisis_estacional_1.sql
-```
-
-Para ver un pequeño análisis predictivo que realizamos en Jupyter Notebook para mostrar posibles aplicaciones del proyecto, consulta [el apéndice 3](appendix/apendice_3.md).
- 
- ## Presentación
- [Propuesta NFL Stadiums] ()
+En conclusión, los análisis confirman que el rendimiento, el calendario y las estadísticas de temporada son variables que pueden explicar la realidad sobre la dinámica de los estadios de la NFL, y que una base de datos bien estructurada es la condición necesaria para hacer este tipo de preguntas. En esta materia y en este proyecto aprendimos la importancia de saber limpiar y manipular los datos para responder preguntas complejas, que pueden impactar las decisiones de un equipo mediante consultas y el buen manejo de los datos. 
  
